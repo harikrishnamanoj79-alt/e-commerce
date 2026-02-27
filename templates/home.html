@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero-section d-flex align-items-center text-center text-white">
+    <div class="container">
+        <h1 class="hero-title">Find Your Dream Property in Kochi</h1>
+        <p class="hero-subtitle">Luxury Villas • Premium Apartments • Commercial Spaces</p>
+
+        <form method="GET" action="/properties/" class="search-box mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <input type="text" name="location" class="form-control search-input"
+                           placeholder="Enter Location (e.g. Kakkanad, Edappally)">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-gold w-100">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<!-- PROPERTY CATEGORIES -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Browse by Category</h2>
+            <p class="text-muted">Find properties by type</p>
+        </div>
+
+        <div class="row">
+            {% for cat in categories %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <a href="/properties/?category={{ cat.slug }}" class="text-decoration-none">
+                    <div class="category-card shadow-sm">
+
+                        {% if cat.image %}
+                        <div class="category-img">
+                            <img src="{{ cat.image.url }}" alt="{{ cat.name }}">
+                        </div>
+                        {% endif %}
+
+                        <div class="category-info text-center p-3">
+                            <h5 class="fw-bold">{{ cat.name }}</h5>
+                            <small class="property-count">
+                                {{ cat.properties.count }} Properties
+                            </small>
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+<!-- FEATURED PROPERTIES -->
+<section class="featured-section py-5 ">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title fw-bold">Featured Properties</h2>
+            <p class="text-muted">Handpicked premium listings just for you</p>
+        </div>
+
+        <div class="row">
+            {% for property in featured_properties %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="property-card shadow-sm">
+
+                    <div class="property-img position-relative">
+                        {% if property.featured_image %}
+                            <img src="{{ property.featured_image.url }}" 
+                                 class="img-fluid" 
+                                 alt="{{ property.title }}">
+                        {% endif %}
+
+                        <!-- Category Badge -->
+                        <span class="badge bg-dark position-absolute top-0 start-0 m-2">
+                            {{ property.category.name }}
+                        </span>
+                    </div>
+
+                    <div class="property-info p-3">
+                        <h5 class="fw-bold">{{ property.title }}</h5>
+                        <p class="text-muted mb-1">
+                            <i class="bi bi-geo-alt"></i> {{ property.location }}
+                        </p>
+
+                        <div class="d-flex justify-content-between small text-muted mb-2">
+                            <span>{{ property.bedrooms }} Beds</span>
+                            <span>{{ property.bathrooms }} Baths</span>
+                            <span>{{ property.area }} sqft</span>
+                        </div>
+
+                        <h6 class="price text-dark fw-bold">₹ {{ property.price }}</h6>
+
+                        <a href="{% url 'property_detail' property.slug %}" 
+                           class="btn btn-dark btn-sm w-100 mt-2">
+                            View Details
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center">
+                <p>No featured properties available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE US SECTION -->
+<section class="why-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Why Choose EstatePro</h2>
+            <p class="section-subtitle">
+                We deliver premium real estate solutions with trust and transparency.
+            </p>
+        </div>
+
+        <div class="row text-center">
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="bi bi-house-door-fill"></i>
+                    </div>
+                    <h5>Premium Listings</h5>
+                    <p>
+                        Carefully selected villas, apartments, and commercial properties 
+                        in prime Kochi locations.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+                    <h5>Transparent Pricing</h5>
+                    <p>
+                        No hidden costs. Clear documentation and expert guidance 
+                        throughout the buying process.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h5>Trusted Advisors</h5>
+                    <p>
+                        Professional real estate consultants helping you 
+                        make confident investment decisions.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIAL SECTION -->
+<section class="testimonial-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <p class="section-subtitle">Trusted by hundreds of happy homeowners</p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p>
+                        “EstatePro helped us find our dream villa in Kakkanad.
+                        The process was smooth and completely transparent.”
+                    </p>
+                    <h6>— Rahul Menon</h6>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p>
+                        “Professional team and excellent support.
+                        Highly recommended for property investment in Kochi.”
+                    </p>
+                    <h6>— Anjali Nair</h6>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p>
+                        “They handled documentation and negotiation perfectly.
+                        Truly a trusted real estate partner.”
+                    </p>
+                    <h6>— Faisal Ahmed</h6>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

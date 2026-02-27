@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="all-properties-section py-5">
+    <div class="container">
+
+        <!-- Section Title -->
+        <div class="text-center mb-5">
+            <h2 class="section-title fw-bold">All Properties</h2>
+            <p class="text-muted">Explore our latest listings</p>
+        </div>
+
+        <div class="row">
+            {% for property in properties %}
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <div class="property-card">
+
+                    <div class="property-img position-relative">
+                        <img src="{{ property.featured_image.url }}" 
+                             alt="{{ property.title }}">
+
+                        <span class="badge position-absolute top-0 start-0 m-3">
+                            {{ property.category.name }}
+                        </span>
+                    </div>
+
+                    <div class="property-info p-3">
+                        <h5 class="fw-bold">{{ property.title }}</h5>
+
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-geo-alt"></i> {{ property.location }}
+                        </p>
+
+                        <h6 class="price mb-3">₹ {{ property.price }}</h6>
+
+                        <a href="{% url 'property_detail' property.slug %}" 
+                           class="btn btn-dark w-100">
+                            View Details
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+            {% empty %}
+            <div class="text-center">
+                <p>No properties found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
