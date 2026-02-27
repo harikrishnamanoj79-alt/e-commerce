@@ -1,0 +1,530 @@
+/* ===============================
+   GLOBAL STYLES
+================================= */
+
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    min-height: 70vh;
+    padding-top: 40px;
+}
+
+
+
+/* ===============================
+   NAVBAR
+================================= */
+
+/* ================= NAVBAR UPDATED ================= */
+
+.navbar {
+    background-color: #1f2d3d;   /* deep blue-gray */
+    padding: 15px 0;
+    transition: 0.4s ease;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 24px;
+    color: #ffffff !important;
+}
+
+.nav-link {
+    color: #e0e0e0 !important;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #f8c146 !important;
+}
+
+
+/* ===============================
+   BUTTON STYLE
+================================= */
+
+.btn-warning {
+    background-color: #f8c146;
+    border: none;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+
+/* ===============================
+   FOOTER
+================================= */
+
+footer {
+    background: #111;
+    color: #bbb;
+    padding: 25px 0;
+    font-size: 14px;
+}
+
+footer a {
+    color: #f8c146;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 991px) {
+    .nav-link {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* ================= HERO SECTION ================= */
+
+.hero-section {
+    height: 90vh;
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                url('../images/ChatGPT\ Image\ Feb\ 26\,\ 2026\,\ 11_38_41\ AM.png');
+    background-size: cover;
+    background-position: center;
+    margin-top: -40px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* Search Box */
+.search-box {
+    margin-top: 30px;
+}
+
+.search-input {
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    padding: 12px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+
+/* ================= FEATURED SECTION ================= */
+
+
+/* ================= FEATURED HOVER COLOR EFFECT ================= */
+
+/* ================= FEATURED CARDS ALWAYS DARK ================= */
+
+.property-card {
+    background: #1f2d3d;   /* Dark theme color */
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: none;
+    color: #ffffff;
+}
+
+.property-card h5,
+.property-card p,
+.property-card span {
+    color: #ffffff !important;
+}
+
+/* Gold price */
+.property-card .price {
+    color: #f8c146 !important;
+    font-weight: 600;
+}
+
+/* Category Badge Gold */
+.property-img .badge {
+    background-color: #f8c146 !important;
+    color: #1f2d3d;
+}
+
+/* Button Style */
+.property-card .btn-dark {
+    background-color: #f8c146;
+    color: #1f2d3d;
+    border: none;
+    border-radius: 8px;
+}
+
+.property-card .btn-dark:hover {
+    background-color: #e0a800;
+    color: #1f2d3d;
+}
+
+
+/* Smaller Property Image */
+.property-img img {
+    width: 100%;
+    height: 200px;   /* reduced from 240px */
+    object-fit: cover;
+}
+
+
+/* ================= WHY SECTION ================= */
+
+/* ================= WHY SECTION (MATCHING NAVBAR THEME) ================= */
+
+.why-section {
+    background-color: #ffffff;   /* Same as navbar */
+    color: #ffffff;
+}
+
+.why-section .section-title {
+    color: #1f2d3d;
+}
+
+.why-section .section-subtitle {
+    color: #1f2d3d;
+}
+
+.why-card {
+    background: #2b3e50;   /* Slightly lighter than navbar */
+    padding: 35px 25px;
+    border-radius: 15px;
+    transition: 0.4s ease;
+    height: 100%;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.why-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border-color: #f8c146;
+}
+
+.why-icon {
+    font-size: 40px;
+    color: #f8c146;   /* Gold accent */
+    margin-bottom: 15px;
+}
+
+.why-card h5 {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.why-card p {
+    color: #d1d5db;
+}
+
+/* ================= TESTIMONIAL SECTION ================= */
+
+.testimonial-section {
+    background: #f8f9fa;
+}
+
+.testimonial-card {
+    background: #2b3e50;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: 0.4s ease;
+    height: 100%;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.testimonial-card p {
+    font-style: italic;
+    color: #f8f9fa;
+}
+
+.testimonial-card h6 {
+    margin-top: 15px;
+    font-weight: 600;
+    color: #f8f9fa;
+}
+
+/* ================= FOOTER SECTION ================= */
+
+.footer-section {
+    background-color: #1f2d3d;
+    padding: 60px 0 20px 0;
+}
+
+.footer-title {
+    font-weight: 600;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.footer-heading {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #f8c146;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #d1d5db;
+    transition: 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #f8c146;
+    padding-left: 5px;
+}
+
+.footer-divider {
+    border-color: rgba(255,255,255,0.1);
+    margin: 30px 0;
+}
+
+.social-icons a {
+    color: #ffffff;
+    margin-right: 12px;
+    font-size: 18px;
+    transition: 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #f8c146;
+}
+
+/* ================= CATEGORY SECTION ================= */
+
+
+
+.category-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #1f2d3d;
+    transition: all 0.4s ease;
+    border: none;
+    color: #ffffff;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+/* Image */
+.category-img img {
+    width: 100%;
+    height: 190px;   /* slightly smaller */
+    object-fit: cover;
+}
+
+/* Info Section (Reduced Height) */
+.category-info {
+    padding: 18px 15px;   /* reduced padding */
+}
+
+.category-info h5 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.category-info small {
+    font-size: 13px;
+    color: #ffffff;   /* gold count */
+}
+/* ================= PROPERTY DETAIL PAGE ================= */
+
+/* ================= PROPERTY DETAIL SECTION ================= */
+
+.property-detail-section {
+    background: #f8f9fa;
+}
+
+/* Card */
+.property-detail-card {
+    background: #1f2d3d;
+    color: #ffffff;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Badge */
+.category-badge {
+    background-color: #f8c146;
+    color: #1f2d3d;
+    padding: 6px 14px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+/* Price */
+.property-price {
+    color: #f8c146;
+    font-size: 26px;
+}
+
+/* Stats */
+.property-stats strong {
+    font-size: 22px;
+    color: #f8c146;
+}
+
+.property-stats small {
+    color: #d1d5db;
+}
+
+/* Divider */
+.divider {
+    border-color: rgba(255,255,255,0.1);
+    margin: 20px 0;
+}
+
+/* Description */
+.property-description {
+    color: #e5e7eb;
+    line-height: 1.7;
+}
+
+/* ================= MOBILE OPTIMIZATION ================= */
+
+@media (max-width: 768px) {
+
+    .property-detail-card {
+        padding: 25px !important;
+    }
+
+    .property-price {
+        font-size: 22px;
+    }
+
+    .property-stats strong {
+        font-size: 18px;
+    }
+}
+/* Map Card */
+.map-card {
+    border-radius: 18px;
+    border: none;
+}
+
+/* Contact Card */
+.contact-card {
+    border-radius: 18px;
+    border: none;
+    background: #1f2d3d;
+    color: #ffffff;
+}
+
+.contact-card input,
+.contact-card textarea {
+    border-radius: 8px;
+}
+
+.contact-card button {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.contact-card button:hover {
+    background-color: #e0a800;
+}
+/* ================= ALL PROPERTIES SECTION ================= */
+
+.all-properties-section {
+    background: #f8f9fa;
+}
+
+/* Property Card */
+.property-card {
+    background: #1f2d3d;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: none;
+}
+
+.property-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* Image */
+.property-img img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: 0.5s ease;
+}
+
+.property-card:hover .property-img img {
+    transform: scale(1.08);
+}
+
+/* Badge */
+.property-img .badge {
+    background-color: #f8c146;
+    color: #1f2d3d;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Price */
+.property-info .price {
+    color: #f8c146;
+    font-weight: 600;
+}
+
+/* Button */
+.property-info .btn-dark {
+    background-color: #f8c146;
+    border: none;
+    border-radius: 8px;
+}
+
