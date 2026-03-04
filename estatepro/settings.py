@@ -157,6 +157,6 @@ import cloudinary
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('mediaflows_eedf7267'),
-    'API_KEY': os.environ.get('347828243962665'),
-    'API_SECRET': os.environ.get('2zrrQsBvhGShfFLF8-3wKnetcE4'),
+    'API_KEY': os.environ.get('273486285829238'),
+    'API_SECRET': os.environ.get('9_FpN_Y5NYrOzWfSRSUjJ9diE6k'),
 }
