@@ -153,8 +153,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import cloudinary
 
+
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dxfbrubyj',
-    'API_KEY': '347828243962665',
-    'API_SECRET': '2zrrQsBvhGShfFLF8-3wKnetcE4'
+    'CLOUD_NAME': os.environ.get('dxfbrubyj'),
+    'API_KEY': os.environ.get('347828243962665'),
+    'API_SECRET': os.environ.get('2zrrQsBvhGShfFLF8-3wKnetcE4'),
 }
