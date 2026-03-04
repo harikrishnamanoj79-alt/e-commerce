@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="admin-wrapper">
+
+    <!-- Overlay -->
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="admin-layout">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="admin-sidebar" id="adminSidebar">
+
+            <div class="sidebar-header">
+                <h5>Admin Panel</h5>
+                <button class="sidebar-close d-md-none"
+                        onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <nav class="admin-menu">
+                <a href="{% url 'admin_dashboard' %}" class="admin-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a href="{% url 'admin_categories' %}" class="admin-link">
+                    <i class="bi bi-tags"></i> Categories
+                </a>
+
+                <a href="{% url 'admin_properties' %}" class="admin-link">
+                    <i class="bi bi-building"></i> Properties
+                </a>
+
+                <a href="{% url 'admin_agents' %}" class="admin-link active">
+                    <i class="bi bi-people"></i> Agents
+                </a>
+
+                <a href="{% url 'admin_spec_fields' %}" class="admin-link">
+                    <i class="bi bi-sliders"></i> Specification Fields
+                </a>
+
+                <a href="{% url 'admin_property_specs' %}" class="admin-link">
+                    <i class="bi bi-list-check"></i> Property Specs
+                </a>
+
+                <a href="/admin/" class="admin-link">
+                    <i class="bi bi-gear"></i> Django Admin
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="admin-content">
+
+            <!-- MOBILE HEADER -->
+            <div class="admin-mobile-header d-md-none">
+                <button onclick="toggleSidebar()" class="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h6 class="mb-0">Agent Detail</h6>
+            </div>
+
+            <div class="container-fluid py-4">
+
+                <!-- ================= AGENT PROFILE ================= -->
+                <div class="admin-card p-4 mb-5">
+
+                    <h2 class="fw-bold mb-3 text-white">
+                        {{ agent_user.username }}
+                    </h2>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3 text-white">
+                            <strong>Email:</strong><br>
+                            {{ agent_user.email }}
+                        </div>
+
+                        <div class="col-md-4 mb-3 text-white">
+                            <strong>Phone:</strong><br>
+                            {{ agent_user.profile.phone }}
+                        </div>
+
+                        <div class="col-md-4 mb-3 text-white">
+                            <strong>Address:</strong><br>
+                            {{ agent_user.profile.address }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= PROPERTIES ================= -->
+                <h4 class="fw-bold mb-4 text-white">
+                    Properties Listed
+                </h4>
+
+                <div class="row">
+
+                    {% for property in properties %}
+                    <div class="col-md-4 col-sm-6 mb-4">
+
+                        <div class="admin-card p-3">
+
+                            <img src="{{ property.featured_image.url }}"
+                                 class="img-fluid rounded mb-3"
+                                 style="height:180px; object-fit:cover;">
+
+                            <h6 class="fw-bold text-white">
+                                {{ property.title }}
+                            </h6>
+
+                            <p class="text-muted small mb-1">
+                                {{ property.location }}
+                            </p>
+
+                            <p class="text-warning fw-bold">
+                                ₹ {{ property.price }}
+                            </p>
+
+                            <a href="{% url 'property_detail' property.slug %}"
+                               class="btn btn-gold w-100">
+                                View Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+                    <div class="col-12 text-center text-muted">
+                        No properties listed.
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                <!-- ================= BOOKINGS ================= -->
+                <hr class="my-5 text-light">
+
+                <h4 class="fw-bold mb-4 text-white">
+                    Visit Bookings
+                </h4>
+
+                <div class="admin-card p-4">
+
+                    <div class="table-responsive booking-table-wrapper">
+                        <table class="table admin-table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Visit Date</th>
+                                    <th>Message</th>
+                                    <th>Booked On</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for booking in bookings %}
+                                <tr>
+                                    <td>{{ booking.property.title }}</td>
+                                    <td>{{ booking.name }}</td>
+                                    <td>{{ booking.phone }}</td>
+                                    <td>{{ booking.visit_date }}</td>
+                                    <td>{{ booking.message }}</td>
+                                    <td>{{ booking.created_at|date:"d M Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">
+                                        No bookings yet.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("adminSidebar").classList.toggle("active");
+    document.getElementById("adminOverlay").classList.toggle("active");
+}
+</script>
+
+{% endblock %}

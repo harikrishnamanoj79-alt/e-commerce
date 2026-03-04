@@ -19,3 +19,8 @@ class PropertyAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'location', 'category', 'is_available')
     list_filter = ('category', 'is_available')
     prepopulated_fields = {"slug": ("title",)}
+    
+from .models import SpecificationField, PropertySpecification
+
+admin.site.register(SpecificationField)
+admin.site.register(PropertySpecification)

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="py-5 bg-light">
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- 🔹 SIDEBAR -->
+            <div class="col-md-3 col-lg-2 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body p-3">
+
+                        <h5 class="fw-bold mb-4">Admin Panel</h5>
+
+                        <div class="list-group list-group-flush">
+
+                            <a href="{% url 'admin_dashboard' %}"
+                               class="list-group-item list-group-item-action">
+                                Dashboard
+                            </a>
+
+                            <a href="{% url 'admin_categories' %}"
+                               class="list-group-item list-group-item-action">
+                                Categories
+                            </a>
+
+                            <a href="{% url 'admin_properties' %}"
+                               class="list-group-item list-group-item-action">
+                                Properties
+                            </a>
+
+                            <a href="{% url 'admin_agents' %}"
+                               class="list-group-item list-group-item-action">
+                                Agents
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🔹 MAIN CONTENT -->
+            <div class="col-md-9 col-lg-10">
+                {% block admin_content %}
+                {% endblock %}
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

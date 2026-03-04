@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="add-property-section py-5">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="add-property-card p-4 p-md-5">
+
+                    <h2 class="fw-bold mb-4 text-center">
+                        Add New Property
+                    </h2>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text"
+                                       name="title"
+                                       class="form-control custom-input"
+                                       placeholder="Property Title"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text"
+                                       name="slug"
+                                       class="form-control custom-input"
+                                       placeholder="Slug (unique URL)"
+                                       required>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <textarea name="description"
+                                          class="form-control custom-input"
+                                          rows="4"
+                                          placeholder="Property Description"
+                                          required></textarea>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="number"
+                                       name="price"
+                                       class="form-control custom-input"
+                                       placeholder="Price"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text"
+                                       name="location"
+                                       class="form-control custom-input"
+                                       placeholder="Location"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <select name="category"
+                                        class="form-control custom-input"
+                                        required>
+                                    <option value="">Select Category</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-12" id="dynamic-spec-fields"></div>
+
+                            <div class="col-md-6 mb-3">
+                                <select name="listing_type"
+                                        class="form-control custom-input"
+                                        required>
+                                    <option value="Sale">Sale</option>
+                                    <option value="Rent">Rent</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number"
+                                       name="bedrooms"
+                                       class="form-control custom-input"
+                                       placeholder="Bedrooms">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number"
+                                       name="bathrooms"
+                                       class="form-control custom-input"
+                                       placeholder="Bathrooms">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number"
+                                       name="area"
+                                       class="form-control custom-input"
+                                       placeholder="Area (sqft)">
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <input type="file"
+                                       name="featured_image"
+                                       class="form-control custom-input"
+                                       required>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit"
+                                        class="btn btn-gold w-100">
+                                    Add Property
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+

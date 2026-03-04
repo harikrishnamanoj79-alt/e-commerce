@@ -10,6 +10,53 @@
             <p class="text-muted">Explore our latest listings</p>
         </div>
 
+        <div class="card shadow-sm p-4 mb-4">
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <input type="text" name="location" class="form-control" placeholder="Location"
+                            value="{{ request.GET.location }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="category" class="form-control">
+
+                            <option value="">All Categories</option>
+
+                            {% for cat in categories %}
+
+                            <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number" name="min_price" class="form-control" placeholder="Min Price"
+                            value="{{ request.GET.min_price }}">
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number" name="max_price" class="form-control" placeholder="Max Price"
+                            value="{{ request.GET.max_price }}">
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-dark w-100">
+                            Filter
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
         <div class="row">
             {% for property in properties %}
             <div class="col-lg-4 col-md-6 mb-4">
@@ -17,8 +64,7 @@
                 <div class="property-card">
 
                     <div class="property-img position-relative">
-                        <img src="{{ property.featured_image.url }}" 
-                             alt="{{ property.title }}">
+                        <img src="{{ property.featured_image.url }}" alt="{{ property.title }}">
 
                         <span class="badge position-absolute top-0 start-0 m-3">
                             {{ property.category.name }}
@@ -34,8 +80,7 @@
 
                         <h6 class="price mb-3">₹ {{ property.price }}</h6>
 
-                        <a href="{% url 'property_detail' property.slug %}" 
-                           class="btn btn-dark w-100">
+                        <a href="{% url 'property_detail' property.slug %}" class="btn btn-dark w-100">
                             View Details
                         </a>
                     </div>

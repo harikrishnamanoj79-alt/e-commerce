@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="admin-wrapper">
+
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar" id="adminSidebar">
+
+            <div class="sidebar-header">
+                <h5>Admin Panel</h5>
+                <button class="sidebar-close d-md-none" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <nav class="admin-menu">
+                <a href="{% url 'admin_dashboard' %}" class="admin-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a href="{% url 'admin_categories' %}" class="admin-link active">
+                    <i class="bi bi-tags"></i> Categories
+                </a>
+
+                <a href="{% url 'admin_properties' %}" class="admin-link">
+                    <i class="bi bi-building"></i> Properties
+                </a>
+
+                <a href="{% url 'admin_agents' %}" class="admin-link">
+                    <i class="bi bi-people"></i> Agents
+                </a>
+
+                <a href="{% url 'admin_spec_fields' %}" class="admin-link">
+                    <i class="bi bi-sliders me-2"></i> Specification Fields
+                </a>
+
+                <a href="{% url 'admin_property_specs' %}" class="admin-link">
+                    <i class="bi bi-list-check me-2"></i> Property Specs
+                </a>
+
+                <a href="/admin/" class="admin-link">
+                    <i class="bi bi-gear"></i> Django Admin
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-content">
+
+            <div class="container-fluid py-4">
+
+            <!-- MOBILE HEADER -->
+            
+            <div class="admin-mobile-header d-md-none">
+                <button onclick="toggleSidebar()" class="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h6 class="mb-0">Admin Dashboard</h6>
+            </div>
+
+            <div class="container-fluid py-4">
+
+                <h2 class="fw-bold mb-4">Categories</h2>
+
+                <!-- ADD CATEGORY -->
+                <div class="admin-card p-4 mb-4">
+                    <h3 class="fw-bold mb-4">Manage Categories</h3>
+
+                    <form method="POST" class="row g-3">
+                        {% csrf_token %}
+
+                        <div class="col-md-8">
+                            <input type="text" name="name" placeholder="Category Name" class="form-control admin-input"
+                                required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <button class="btn btn-gold w-100">
+                                Add Category
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- CATEGORY TABLE -->
+                <div class="admin-card p-4">
+                    <h5 class="fw-bold mb-4">Category List</h5>
+
+                    <div class="table-responsive">
+                        <table class="table admin-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cat in categories %}
+                                <tr>
+                                    <td>{{ cat.name }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td class="text-center text-muted">
+                                        No categories added yet.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("adminSidebar").classList.toggle("active");
+    document.getElementById("adminOverlay").classList.toggle("active");
+}
+</script>
+
+
+{% endblock %}

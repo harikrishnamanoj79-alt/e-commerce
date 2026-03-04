@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="admin-wrapper">
+
+    <!-- Overlay -->
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="admin-layout">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="admin-sidebar" id="adminSidebar">
+
+            <div class="sidebar-header">
+                <h5>Admin Panel</h5>
+                <button class="sidebar-close d-md-none"
+                        onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <nav class="admin-menu">
+
+                <a href="{% url 'admin_dashboard' %}" class="admin-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a href="{% url 'admin_categories' %}" class="admin-link">
+                    <i class="bi bi-tags"></i> Categories
+                </a>
+
+                <a href="{% url 'admin_properties' %}" class="admin-link">
+                    <i class="bi bi-building"></i> Properties
+                </a>
+
+                <a href="{% url 'admin_agents' %}" class="admin-link">
+                    <i class="bi bi-people"></i> Agents
+                </a>
+
+                <a href="{% url 'admin_spec_fields' %}" class="admin-link">
+                    <i class="bi bi-sliders"></i> Specification Fields
+                </a>
+
+                <a href="{% url 'admin_property_specs' %}" class="admin-link active">
+                    <i class="bi bi-list-check"></i> Property Specs
+                </a>
+
+                <a href="/admin/" class="admin-link">
+                    <i class="bi bi-gear"></i> Django Admin
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="admin-content">
+
+            <!-- MOBILE HEADER -->
+            <div class="admin-mobile-header d-md-none">
+                <button onclick="toggleSidebar()" class="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h6 class="mb-0">Add Property Specification</h6>
+            </div>
+
+            <div class="container-fluid py-4">
+
+                <h2 class="fw-bold mb-4 text-white">
+                    Add Property Specification
+                </h2>
+
+                <div class="admin-card p-4">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Property -->
+                        <div class="mb-3">
+                            <label class="form-label text-white">
+                                Property
+                            </label>
+                            <select name="property"
+                                    class="form-control"
+                                    required>
+                                <option value="">Select Property</option>
+                                {% for property in properties %}
+                                <option value="{{ property.id }}">
+                                    {{ property.title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Specification Field -->
+                        <div class="mb-3">
+                            <label class="form-label text-white">
+                                Specification Field
+                            </label>
+                            <select name="field"
+                                    class="form-control"
+                                    required>
+                                <option value="">Select Field</option>
+                                {% for field in fields %}
+                                <option value="{{ field.id }}">
+                                    {{ field.category.name }} - {{ field.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Value -->
+                        <div class="mb-4">
+                            <label class="form-label text-white">
+                                Value
+                            </label>
+                            <input type="text"
+                                   name="value"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <button class="btn btn-gold">
+                            Save Specification
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("adminSidebar").classList.toggle("active");
+    document.getElementById("adminOverlay").classList.toggle("active");
+}
+</script>
+
+{% endblock %}

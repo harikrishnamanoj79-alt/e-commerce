@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>404 | EstatePro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    background:linear-gradient(135deg,#1f2d3d,#16222e);
+    color:#fff;
+    position:relative;
+}
+
+/* ================= PARTICLE BACKGROUND ================= */
+#particles-js{
+    position:absolute;
+    width:100%;
+    height:100%;
+    z-index:0;
+}
+
+/* ================= PARALLAX CONTAINER ================= */
+.parallax-layer{
+    position:absolute;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+
+/* ================= MOVING SKYLINE ================= */
+.skyline{
+    position:absolute;
+    bottom:0;
+    width:200%;
+    height:120px;
+    background:repeating-linear-gradient(
+        to right,
+        #0f1a24 0px,
+        #0f1a24 40px,
+        #1a2733 40px,
+        #1a2733 80px
+    );
+    animation:moveCity 25s linear infinite;
+}
+
+@keyframes moveCity{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+}
+
+/* ================= CONTENT ================= */
+.content{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+/* Glowing 404 */
+.error-code{
+    font-size:140px;
+    font-weight:800;
+    color:#f8c146;
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{ text-shadow:0 0 10px rgba(248,193,70,0.5); }
+    to{ text-shadow:0 0 40px rgba(248,193,70,1); }
+}
+
+.subtitle{
+    font-size:22px;
+    margin:20px 0 40px;
+    opacity:0.9;
+}
+
+/* Premium Button */
+.home-btn{
+    padding:14px 35px;
+    border-radius:50px;
+    background:#f8c146;
+    color:#1f2d3d;
+    font-weight:600;
+    text-decoration:none;
+    transition:0.3s ease;
+    box-shadow:0 10px 30px rgba(248,193,70,0.3);
+}
+
+.home-btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 40px rgba(248,193,70,0.7);
+}
+
+/* ================= 3D HOUSE SVG ================= */
+.house{
+    width:120px;
+    margin-bottom:20px;
+    animation:floatHouse 3s ease-in-out infinite;
+}
+
+@keyframes floatHouse{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-15px); }
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .error-code{ font-size:90px; }
+    .subtitle{ font-size:18px; }
+}
+
+</style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="skyline"></div>
+
+<div class="content">
+
+    <!-- 3D Animated House -->
+    <svg class="house" viewBox="0 0 64 64" fill="#f8c146">
+        <path d="M32 12 L4 32 H12 V52 H26 V38 H38 V52 H52 V32 H60 Z"/>
+    </svg>
+
+    <div class="error-code">404</div>
+
+    <div class="subtitle">
+        This property has vanished from our listings.
+    </div>
+
+    <a href="/" class="home-btn">
+        Return Home
+    </a>
+
+</div>
+
+<!-- ================= PARTICLES SCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script>
+particlesJS("particles-js",{
+  particles:{
+    number:{ value:60 },
+    color:{ value:"#f8c146" },
+    shape:{ type:"circle" },
+    opacity:{ value:0.3 },
+    size:{ value:3 },
+    line_linked:{
+        enable:true,
+        distance:150,
+        color:"#f8c146",
+        opacity:0.2,
+        width:1
+    },
+    move:{
+        enable:true,
+        speed:2
+    }
+  }
+});
+
+/* ================= PARALLAX MOUSE EFFECT ================= */
+document.addEventListener("mousemove", function(e){
+    let x = (window.innerWidth/2 - e.pageX) / 50;
+    let y = (window.innerHeight/2 - e.pageY) / 50;
+    document.querySelector(".content").style.transform =
+        `translate(${x}px, ${y}px)`;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="agent-dashboard py-5">
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="d-flex flex-column flex-md-row 
+                    justify-content-between 
+                    align-items-md-center 
+                    mb-4">
+
+            <h2 class="fw-bold mb-3 mb-md-0 text-white">
+                Agent Dashboard
+            </h2>
+
+            <a href="{% url 'agent_add_property' %}" class="btn btn-gold">
+                + Add Property
+            </a>
+        </div>
+
+        <!-- STATS -->
+        <div class="row mb-5">
+
+            <div class="col-md-6 mb-3">
+                <div class="dashboard-card text-center p-4">
+                    <h6>Total Properties</h6>
+                    <h2>{{ total_properties }}</h2>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="dashboard-card text-center p-4">
+                    <h6>Total Bookings</h6>
+                    <h2>{{ total_bookings }}</h2>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PROPERTIES -->
+        <h4 class="section-title">Your Properties</h4>
+
+        {% for property in properties %}
+        <div class="dashboard-list-card p-3 mb-3">
+            <div class="d-flex flex-column flex-md-row 
+                        justify-content-between 
+                        align-items-md-center">
+
+                <div>
+                    <strong>{{ property.title }}</strong><br>
+                    <small>{{ property.location }}</small>
+                </div>
+
+                <a href="{% url 'property_detail' property.slug %}"
+                   class="btn btn-outline-gold btn-sm mt-3 mt-md-0">
+                    View
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-light">No properties added yet.</p>
+        {% endfor %}
+
+        <hr class="divider my-5">
+
+        <!-- BOOKINGS -->
+        <h4 class="section-title">Recent Bookings</h4>
+
+        {% for booking in recent_bookings %}
+        <div class="dashboard-list-card p-3 mb-2">
+            <strong>{{ booking.name }}</strong>
+            <p class="mb-1">
+                Property: {{ booking.property.title }}
+            </p>
+            <small>Visit Date: {{ booking.visit_date }}</small>
+        </div>
+        {% empty %}
+        <p class="text-light">No bookings yet.</p>
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}

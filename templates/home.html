@@ -8,16 +8,28 @@
         <h1 class="hero-title">Find Your Dream Property in Kochi</h1>
         <p class="hero-subtitle">Luxury Villas • Premium Apartments • Commercial Spaces</p>
 
-        <form method="GET" action="/properties/" class="search-box mt-4">
+        <form method="GET" action="/properties/" class="search-box mt-4 position-relative">
+
             <div class="row justify-content-center">
-                <div class="col-md-4">
-                    <input type="text" name="location" class="form-control search-input"
-                           placeholder="Enter Location (e.g. Kakkanad, Edappally)">
+
+                <div class="col-md-6 position-relative">
+
+                    <input type="text" id="propertySearch" name="q" class="form-control search-input"
+                        placeholder="Search: villa in kochi under 10000000" autocomplete="off">
+
+                    <!-- Suggestions -->
+                    <div id="searchSuggestions" class="suggestions-box"></div>
+
                 </div>
+
                 <div class="col-md-2">
-                    <button class="btn btn-gold w-100">Search</button>
+                    <button class="btn btn-gold w-100">
+                        Search
+                    </button>
                 </div>
+
             </div>
+
         </form>
     </div>
 </section>
@@ -75,9 +87,7 @@
 
                     <div class="property-img position-relative">
                         {% if property.featured_image %}
-                            <img src="{{ property.featured_image.url }}" 
-                                 class="img-fluid" 
-                                 alt="{{ property.title }}">
+                        <img src="{{ property.featured_image.url }}" class="img-fluid" alt="{{ property.title }}">
                         {% endif %}
 
                         <!-- Category Badge -->
@@ -100,8 +110,7 @@
 
                         <h6 class="price text-dark fw-bold">₹ {{ property.price }}</h6>
 
-                        <a href="{% url 'property_detail' property.slug %}" 
-                           class="btn btn-dark btn-sm w-100 mt-2">
+                        <a href="{% url 'property_detail' property.slug %}" class="btn btn-dark btn-sm w-100 mt-2">
                             View Details
                         </a>
                     </div>
@@ -136,7 +145,7 @@
                     </div>
                     <h5>Premium Listings</h5>
                     <p>
-                        Carefully selected villas, apartments, and commercial properties 
+                        Carefully selected villas, apartments, and commercial properties
                         in prime Kochi locations.
                     </p>
                 </div>
@@ -149,7 +158,7 @@
                     </div>
                     <h5>Transparent Pricing</h5>
                     <p>
-                        No hidden costs. Clear documentation and expert guidance 
+                        No hidden costs. Clear documentation and expert guidance
                         throughout the buying process.
                     </p>
                 </div>
@@ -162,7 +171,7 @@
                     </div>
                     <h5>Trusted Advisors</h5>
                     <p>
-                        Professional real estate consultants helping you 
+                        Professional real estate consultants helping you
                         make confident investment decisions.
                     </p>
                 </div>

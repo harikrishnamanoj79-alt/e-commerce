@@ -14,7 +14,7 @@ body {
 
 .main-content {
     min-height: 70vh;
-    padding-top: 40px;
+    padding-top: 0px;
 }
 
 
@@ -25,29 +25,54 @@ body {
 
 /* ================= NAVBAR UPDATED ================= */
 
-.navbar {
-    background-color: #1f2d3d;   /* deep blue-gray */
-    padding: 15px 0;
-    transition: 0.4s ease;
+/* ================= NAVBAR THEME ================= */
+
+.custom-navbar {
+    background-color: #1f2d3d;
 }
 
-.navbar-brand {
-    font-weight: 600;
-    font-size: 24px;
+/* Nav Links */
+.custom-navbar .nav-link {
     color: #ffffff !important;
-}
-
-.nav-link {
-    color: #e0e0e0 !important;
-    margin-left: 20px;
     font-weight: 500;
     transition: 0.3s ease;
 }
 
-.nav-link:hover {
+.custom-navbar .nav-link:hover {
     color: #f8c146 !important;
 }
 
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: 0.3s ease;
+    height: 50px;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+    color: #1f2d3d;
+}
+
+/* Dropdown */
+.custom-dropdown {
+    background-color: #1f2d3d;
+    border: none;
+    border-radius: 10px;
+}
+
+.custom-dropdown .dropdown-item {
+    color: #ffffff;
+}
+
+.custom-dropdown .dropdown-item:hover {
+    background-color: #f8c146;
+    color: #1f2d3d;
+}
 
 /* ===============================
    BUTTON STYLE
@@ -100,48 +125,140 @@ footer a:hover {
 
 /* ================= HERO SECTION ================= */
 
-.hero-section {
-    height: 90vh;
-    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-                url('../images/ChatGPT\ Image\ Feb\ 26\,\ 2026\,\ 11_38_41\ AM.png');
-    background-size: cover;
-    background-position: center;
-    margin-top: -40px;
+/* ================= HERO SECTION ================= */
+
+.hero-section{
+    height:85vh;
+    background:url("/static/images/ChatGPT\ Image\ Feb\ 26\,\ 2026\,\ 11_38_41\ AM.png") center/cover no-repeat;
+    position:relative;
 }
 
-.hero-title {
-    font-size: 48px;
-    font-weight: 700;
+/* Dark overlay */
+.hero-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0.6)
+    );
 }
 
-.hero-subtitle {
-    font-size: 18px;
-    opacity: 0.9;
+.hero-section .container{
+    position:relative;
+    z-index:2;
 }
 
-/* Search Box */
-.search-box {
-    margin-top: 30px;
+/* ================= HERO TEXT ================= */
+
+.hero-title{
+    font-size:52px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    margin-bottom:10px;
 }
 
-.search-input {
-    padding: 12px;
-    border-radius: 6px;
+.hero-subtitle{
+    font-size:18px;
+    opacity:0.9;
 }
 
-.btn-gold {
-    background-color: #f8c146;
-    border: none;
-    padding: 12px;
-    font-weight: 500;
-    transition: 0.3s;
+/* ================= SEARCH BOX ================= */
+
+.search-box{
+    margin-top:30px;
 }
 
-.btn-gold:hover {
-    background-color: #e0a800;
-    transform: translateY(-2px);
+/* Search input */
+
+.search-input{
+    height:55px;
+    border-radius:50px;
+    padding-left:25px;
+    font-size:15px;
+    border:none;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
+.search-input:focus{
+    outline:none;
+    box-shadow:0 0 0 3px rgba(248,193,70,0.35);
+}
+
+/* Gold Button */
+
+.btn-gold{
+    height:55px;
+    border-radius:50px;
+    background:#f8c146;
+    color:#1f2d3d;
+    font-weight:600;
+    border:none;
+    transition:0.3s ease;
+}
+
+.btn-gold:hover{
+    background:#e0ad35;
+    transform:translateY(-2px);
+}
+
+/* ================= SUGGESTIONS ================= */
+
+.suggestions-box{
+    position:absolute;
+    width:100%;
+    background:#1f2d3d;
+    border-radius:10px;
+    margin-top:5px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    z-index:1000;
+    max-height:220px;
+    overflow-y:auto;
+}
+
+.suggestions-box div{
+    padding:10px 15px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.suggestions-box div:hover{
+    background:#f8c146;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+
+.hero-title{
+    font-size:36px;
+}
+
+.hero-subtitle{
+    font-size:16px;
+}
+
+.hero-section{
+    height:70vh;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero-title{
+    font-size:28px;
+}
+
+.search-input{
+    margin-bottom:10px;
+}
+
+.btn-gold{
+    width:100%;
+}
+
+}
 
 /* ================= FEATURED SECTION ================= */
 
@@ -377,37 +494,27 @@ footer a:hover {
 
 /* ================= PROPERTY DETAIL SECTION ================= */
 
-.property-detail-section {
-    background: #f8f9fa;
-}
+/* ================= PROPERTY DETAIL ================= */
 
-/* Card */
 .property-detail-card {
     background: #1f2d3d;
     color: #ffffff;
-    border-radius: 20px;
-    border: none;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border-radius: 18px;
 }
 
-/* Badge */
 .category-badge {
-    background-color: #f8c146;
+    background: #f8c146;
     color: #1f2d3d;
-    padding: 6px 14px;
-    font-weight: 500;
-    border-radius: 6px;
+    font-weight: 600;
+    padding: 6px 12px;
 }
 
-/* Price */
 .property-price {
     color: #f8c146;
-    font-size: 26px;
 }
 
-/* Stats */
 .property-stats strong {
-    font-size: 22px;
+    font-size: 20px;
     color: #f8c146;
 }
 
@@ -415,16 +522,41 @@ footer a:hover {
     color: #d1d5db;
 }
 
-/* Divider */
-.divider {
-    border-color: rgba(255,255,255,0.1);
-    margin: 20px 0;
-}
-
-/* Description */
 .property-description {
     color: #e5e7eb;
-    line-height: 1.7;
+}
+
+.divider {
+    border-color: rgba(255,255,255,0.1);
+}
+
+/* Gallery */
+.gallery-img {
+    height: 120px;
+    width: 100%;
+    object-fit: cover;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-img:hover {
+    transform: scale(1.05);
+}
+
+/* Contact Card */
+.contact-card {
+    border-radius: 18px;
+}
+
+.btn-gold {
+    background: #f8c146;
+    color: #1f2d3d;
+    font-weight: 600;
+}
+
+.btn-gold:hover {
+    background: #e0a800;
+    color: #1f2d3d;
 }
 
 /* ================= MOBILE OPTIMIZATION ================= */
@@ -526,5 +658,1496 @@ footer a:hover {
     background-color: #f8c146;
     border: none;
     border-radius: 8px;
+}
+
+
+/* ================= AUTH SECTION ================= */
+
+.auth-section {
+    background: #f8f9fa;
+}
+
+.auth-card {
+    background: #1f2d3d;
+    color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Inputs */
+.auth-input {
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.auth-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #f8c146;
+}
+
+/* Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px;
+    color: #1f2d3d;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+    color: #1f2d3d;
+}
+
+/* Login Link */
+.auth-link {
+    color: #f8c146;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ================= AGENT DASHBOARD ================= */
+
+.agent-dashboard {
+    background: #1f2d3d;
+    min-height: 100vh;
+    color: #ffffff;
+}
+
+/* Section Title */
+.section-title {
+    color: #f8c146;
+    margin-bottom: 20px;
+}
+
+/* Stat Cards */
+.dashboard-card {
+    background: #2b3e50;
+    border-radius: 18px;
+    transition: 0.3s ease;
+}
+
+.dashboard-card h6 {
+    color: #d1d5db;
+}
+
+.dashboard-card h2 {
+    color: #f8c146;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* List Cards */
+.dashboard-list-card {
+    background: #2b3e50;
+    border-radius: 14px;
+    transition: 0.3s ease;
+}
+
+.dashboard-list-card strong {
+    color: #ffffff;
+}
+
+.dashboard-list-card small {
+    color: #d1d5db;
+}
+
+.dashboard-list-card:hover {
+    background: #34495e;
+}
+
+/* Divider */
+.divider {
+    border-color: rgba(255,255,255,0.1);
+}
+
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 18px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+/* Outline Gold Button */
+.btn-outline-gold {
+    border: 1px solid #f8c146;
+    color: #f8c146;
+    background: transparent;
+}
+
+.btn-outline-gold:hover {
+    background: #f8c146;
+    color: #1f2d3d;
+}
+
+
+/* ================= ADD PROPERTY PAGE ================= */
+
+.add-property-section {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.add-property-card {
+    background: #2b3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+    color: #ffffff;
+}
+
+/* Inputs */
+.custom-input {
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.custom-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #f8c146;
+}
+
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+/* ================= ABOUT HERO ================= */
+
+.about-hero {
+    background: linear-gradient(rgba(31,45,61,0.85), rgba(31,45,61,0.85)),
+                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+}
+
+/* ================= ABOUT SECTION ================= */
+
+.about-section {
+    background: #f8f9fa;
+}
+
+/* ================= WHY SECTION ================= */
+
+.about-why {
+    background: #f8f9fa;
+}
+
+
+.why-box {
+    background: #2b3e50;
+    border-radius: 18px;
+    transition: 0.3s ease;
+}
+
+.why-box i {
+    color: #f8c146;
+}
+
+.why-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* ================= CTA SECTION ================= */
+
+.about-cta {
+    background: #f8f9fa;
+}
+
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+
+/* ================= CONTACT HERO ================= */
+
+.contact-hero {
+    background: linear-gradient(rgba(31,45,61,0.85), rgba(31,45,61,0.85)),
+                url('https://images.unsplash.com/photo-1560518883-ce09059eeffa');
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+}
+
+/* ================= CONTACT SECTION ================= */
+
+.contact-section {
+    background: #f8f9fa;
+}
+
+/* Contact Form Card */
+.contact-card {
+    background: #1f2d3d;
+    border-radius: 20px;
+    color: #ffffff;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+}
+
+/* Contact Info Card */
+.contact-info-card {
+    background: #2b3e50;
+    border-radius: 18px;
+    color: #ffffff;
+}
+
+/* Inputs */
+.contact-input {
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.contact-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #f8c146;
+}
+
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+
+/* ================= PROPERTY FILTER ================= */
+
+.filter-card {
+    background: #1f2d3d;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Inputs */
+.filter-input {
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.filter-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #f8c146;
+}
+
+/* Gold Button */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+
+/* ================= ADMIN DASHBOARD ================= */
+
+/* ================= ADMIN WRAPPER ================= */
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+/* Layout */
+.admin-layout {
+    display: flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.admin-sidebar {
+    width: 240px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+    transition: 0.3s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-link {
+    color: #d1d5db;
+    text-decoration: none;
+    padding: 10px 0;
+    transition: 0.3s ease;
+}
+
+.admin-link i {
+    margin-right: 8px;
+}
+
+.admin-link:hover {
+    color: #f8c146;
+    padding-left: 5px;
+}
+
+/* ================= CONTENT ================= */
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+/* Mobile header */
+.admin-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #16222e;
+    padding: 15px 20px;
+    color: white;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: #f8c146;
+    font-size: 20px;
+}
+
+/* ================= CARDS ================= */
+
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+    padding: 25px;
+    transition: 0.3s ease;
+}
+
+.admin-card h6 {
+    color: #d1d5db;
+}
+
+.admin-card h2 {
+    color: #f8c146;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* ================= BUTTONS ================= */
+
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+
+/* ================= MOBILE SIDEBAR ================= */
+
+@media (max-width: 768px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 250px;
+        height: 100%;
+        background: #16222e;
+        z-index: 1050;
+        transition: 0.3s ease;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1040;
+    }
+
+    .admin-overlay.active {
+        display: block;
+    }
+
+    .admin-content {
+        padding: 20px;
+    }
+}
+/* ================= ADMIN BASE ================= */
+
+/* ===== ADMIN LAYOUT ===== */
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: flex;
+}
+
+/* SIDEBAR */
+.admin-sidebar {
+    width: 240px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-link {
+    color: #d1d5db;
+    text-decoration: none;
+    padding: 10px 0;
+    transition: 0.3s ease;
+}
+
+.admin-link i {
+    margin-right: 8px;
+}
+
+.admin-link:hover,
+.admin-link.active {
+    color: #f8c146;
+}
+
+/* CONTENT */
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+/* CARD */
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    color: #ffffff;
+}
+/* INPUT */
+.admin-input:focus {
+    box-shadow: 0 0 0 2px #f8c146;
+    border: none;
+}
+
+/* BUTTON */
+.btn-gold {
+    background-color: #f8c146;
+    border: none;
+    color: #1f2d3d;
+    font-weight: 600;
+}
+
+/* TABLE */
+/* ================= ADMIN TABLE PREMIUM ================= */
+
+
+/* Table Base */
+.admin-table {
+    background: transparent;
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+/* Header */
+.admin-table thead {
+    background: #16222e;
+}
+
+.admin-table thead th {
+    color: #f8c146;
+    font-weight: 600;
+    border: none;
+    padding: 14px 16px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Body */
+.admin-table tbody td {
+    border-color: rgba(255,255,255,0.08);
+    padding: 14px 16px;
+    font-size: 14px;
+}
+
+/* Hover Effect */
+.admin-table tbody tr {
+    transition: 0.3s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: #34495e;
+}
+
+/* Empty Row */
+.admin-table tbody tr td.text-muted {
+    color: #d1d5db !important;
+}
+
+/* Responsive Scroll Styling */
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+/* ===== ADMIN LAYOUT ===== */
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: flex;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+    transition: 0.3s ease;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-link {
+    color: #d1d5db;
+    text-decoration: none;
+    padding: 10px 0;
+    transition: 0.3s ease;
+}
+
+.admin-link:hover,
+.admin-link.active {
+    color: #f8c146;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+/* Cards */
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+}
+
+/* Table */
+.admin-table {
+    color: #ffffff;
+}
+
+.admin-table thead {
+    background: #16222e;
+}
+
+.admin-table thead th {
+    color: #f8c146;
+}
+
+.admin-table tbody tr:hover {
+    background: #34495e;
+}
+
+/* Thumbnail */
+.admin-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.text-gold {
+    color: #f8c146;
+}
+
+/* Mobile */
+.admin-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1040;
+    }
+
+    .admin-overlay.active {
+        display: block;
+    }
+}
+
+/* ===== PROPERTY TABLE MOBILE FIX ===== */
+
+.property-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+    min-width: 900px; /* forces scroll instead of squeeze */
+}
+
+@media (max-width: 768px) {
+
+    .admin-card {
+        padding: 15px !important;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .admin-thumb {
+        width: 70px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+
+/* ================= ACTION BUTTONS ================= */
+
+.actions-cell {
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Base button */
+.btn-action {
+    padding: 5px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Edit Button (Gold Theme) */
+.btn-edit {
+    border-color: #f8c146;
+    color: #f8c146;
+    background: transparent;
+}
+
+.btn-edit:hover {
+    background: #f8c146;
+    color: #1f2d3d;
+}
+
+/* Delete Button (Red) */
+.btn-delete {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: transparent;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px) {
+    .btn-action {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+/* ================= ADD PROPERTY BUTTON ================= */
+
+/* ================= ADD PROPERTY BUTTON ================= */
+
+.btn-add-property {
+    background: #f8c146;
+    color: #1f2d3d;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: 0.3s ease;
+    border: none;
+}
+
+.btn-add-property:hover {
+    background: #e0a800;
+    color: #1f2d3d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.btn-add-property i {
+    font-size: 14px;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-add-property {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: flex;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+}
+
+.btn-add-property {
+    background: #f8c146;
+    color: #1f2d3d;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+        transition: 0.3s;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1040;
+    }
+
+    .admin-overlay.active {
+        display: block;
+    }
+}
+
+
+.gallery-thumb {
+    height: 100px;
+    width: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.3s ease;
+    opacity: 0.85;
+}
+
+.gallery-thumb:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+
+/* ================= ADMIN AGENTS PAGE ================= */
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: flex;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+}
+
+.admin-table {
+    min-width: 900px;
+    color: #ffffff;
+}
+
+.admin-table thead {
+    background: #1f2d3d;
+    color: #f8c146;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-action {
+    padding: 5px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: 0.3s ease;
+    background: transparent;
+}
+
+.btn-view {
+    border-color: #0dcaf0;
+    color: #0dcaf0;
+}
+
+.btn-view:hover {
+    background: #0dcaf0;
+    color: #1f2d3d;
+}
+
+.btn-warning-action {
+    border-color: #f8c146;
+    color: #f8c146;
+}
+
+.btn-warning-action:hover {
+    background: #f8c146;
+    color: #1f2d3d;
+}
+
+.btn-delete {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+        transition: 0.3s;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1040;
+    }
+
+    .admin-overlay.active {
+        display: block;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+.admin-wrapper {
+    background: #1f2d3d;
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: flex;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #16222e;
+    padding: 25px;
+    min-height: 100vh;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    color: #ffffff;
+}
+
+.admin-card {
+    background: #2b3e50;
+    border-radius: 18px;
+}
+
+.btn-gold {
+    background: #f8c146;
+    color: #1f2d3d;
+    font-weight: 600;
+    height: 40px;
+}
+
+.btn-gold:hover {
+    background: #e0a800;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+        transition: 0.3s;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1040;
+    }
+
+    .admin-overlay.active {
+        display: block;
+    }
+}
+
+
+/* ================= BOOKING TABLE ================= */
+
+.admin-table {
+    min-width: 1000px;
+    color: #ffffff;
+}
+
+.admin-table thead {
+    background: #1f2d3d;
+    color: #f8c146;
+}
+
+.admin-table td,
+.admin-table th {
+    border-color: rgba(255,255,255,0.08);
+}
+
+/* Responsive Scroll */
+.booking-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .admin-table th,
+    .admin-table td {
+        white-space: nowrap;
+        font-size: 13px;
+    }
+}
+
+
+/* ================= MOBILE TABLE FIX ================= */
+
+.custom-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent squeezing */
+.admin-table {
+    min-width: 1000px;
+}
+
+/* Mobile font adjust */
+@media (max-width: 768px) {
+
+    .admin-table th,
+    .admin-table td {
+        white-space: nowrap;
+        font-size: 13px;
+        padding: 10px;
+    }
+
+}
+
+
+
+/* ================= PROFILE PAGE ================= */
+
+.profile-section{
+    background: linear-gradient(135deg,#f6f8fb,#eef2f7);
+    min-height: 100vh;
+}
+
+/* ================= PROFILE CARD ================= */
+
+.profile-card{
+    background:#1f2d3d;
+    color:#ffffff;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    transition:all .35s ease;
+}
+
+.profile-card:hover{
+    transform:translateY(-6px);
+}
+
+.profile-img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #f8c146;
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+.profile-card h4{
+    margin-top:15px;
+    font-weight:600;
+}
+
+.profile-card p{
+    margin-bottom:6px;
+}
+
+.profile-info{
+    margin-top:20px;
+    font-size:15px;
+    opacity:0.9;
+}
+
+/* ================= BOOKING CARD ================= */
+
+.booking-card{
+    background:#ffffff;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+.section-title{
+    font-weight:700;
+    color:#1f2d3d;
+}
+
+/* ================= TABLE ================= */
+
+.booking-table{
+    border-collapse:separate;
+    border-spacing:0;
+}
+
+.booking-table thead{
+    background:#1f2d3d;
+    color:#ffffff;
+}
+
+.booking-table th{
+    padding:14px;
+    font-weight:600;
+}
+
+.booking-table td{
+    padding:14px;
+    vertical-align:middle;
+}
+
+.booking-table tbody tr{
+    transition:0.25s;
+}
+
+.booking-table tbody tr:hover{
+    background:#f9fafc;
+}
+
+/* ================= STATUS BADGES ================= */
+
+.status-pending{
+    background:#ffc107;
+    color:#000;
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.status-approved{
+    background:#28a745;
+    color:#fff;
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.status-cancelled{
+    background:#dc3545;
+    color:#fff;
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ================= VIEW BUTTON ================= */
+
+.btn-view{
+    background:#f8c146;
+    color:#1f2d3d;
+    padding:7px 16px;
+    border-radius:8px;
+    font-weight:600;
+    text-decoration:none;
+    transition:all .3s ease;
+}
+
+.btn-view:hover{
+    background:#e0ad35;
+    color:#1f2d3d;
+    transform:translateY(-2px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+.profile-card{
+    padding:25px;
+}
+
+.profile-img{
+    width:100px;
+    height:100px;
+}
+
+.booking-card{
+    padding:20px;
+}
+
+.booking-table th,
+.booking-table td{
+    font-size:13px;
+}
+
+}
+
+
+.spec-item{
+background:#f8f9fa;
+padding:12px;
+border-radius:8px;
+text-align:center;
+}
+
+.spec-label{
+display:block;
+font-size:13px;
+color:#777;
+}
+
+.spec-value{
+font-weight:600;
+font-size:16px;
+}
+
+/* ================= BOOK VISIT CARD ================= */
+
+.visit-card{
+    border-radius:20px;
+    border:none;
+    background:#1f2d3d;
+    box-shadow:0 15px 40px rgba(0,0,0,0.08);
+    transition:all 0.3s ease;
+}
+
+.visit-card:hover{
+    transform:translateY(-4px);
+}
+
+/* Card Title */
+
+.visit-card h5{
+    color:#f8c146;
+    font-weight:700;
+    font-size:20px;
+}
+
+/* Labels */
+
+.visit-card label{
+    font-size:14px;
+    font-weight:600;
+    color:#f8c146;
+    margin-bottom:5px;
+}
+
+/* Inputs */
+
+.visit-card .form-control{
+    height:45px;
+    border-radius:10px;
+    border:1px solid #e3e3e3;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.visit-card textarea.form-control{
+    height:auto;
+}
+
+/* Input Focus */
+
+.visit-card .form-control:focus{
+    border-color:#f8c146;
+    box-shadow:0 0 0 2px rgba(248,193,70,0.25);
+}
+
+/* Button */
+
+.btn-book{
+    background:#f8c146;
+    color:#1f2d3d;
+    font-weight:600;
+    border-radius:10px;
+    height:45px;
+    transition:0.3s ease;
+}
+
+.btn-book:hover{
+    background:#f8c146;
+    color:#1f2d3d;
+}
+
+/* Login Button */
+
+.btn-login{
+    background:#1f2d3d;
+    color:#fff;
+    border-radius:10px;
+    height:45px;
+    font-weight:600;
+}
+
+.btn-login:hover{
+    background:#f8c146;
+    color:#1f2d3d;
+}
+
+/* Sticky spacing */
+
+.sticky-top{
+    z-index:10;
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.sticky-top{
+    position:relative !important;
+    top:0 !important;
+}
+
 }
 

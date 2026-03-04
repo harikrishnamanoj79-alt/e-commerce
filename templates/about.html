@@ -1,9 +1,96 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container mt-5">
-    <h2>About the Agent</h2>
-    <p>I am a professional real estate agent in Kochi with 10+ years experience helping clients find dream homes.</p>
-</div>
+<!-- HERO SECTION -->
+<section class="about-hero text-white text-center d-flex align-items-center">
+    <div class="container">
+        <h1 class="fw-bold display-5">About EstatePro</h1>
+        <p class="lead mt-3">
+            Your trusted real estate partner in Kochi, Kerala.
+        </p>
+    </div>
+</section>
+
+
+<!-- ABOUT CONTENT -->
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6 mb-4">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa"
+                     class="img-fluid rounded-4 shadow"
+                     alt="Real Estate">
+            </div>
+
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-3">Who We Are</h2>
+                <p>
+                    EstatePro is a modern real estate platform dedicated to helping
+                    buyers, sellers, and investors find the perfect property.
+                    We specialize in villas, apartments, land, and commercial properties
+                    across Kochi and surrounding areas.
+                </p>
+
+                <p>
+                    Our mission is to provide transparency, trust, and
+                    professional service in every transaction.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- WHY CHOOSE US -->
+<section class="about-why py-5 text-white">
+    <div class="container text-center">
+
+        <h2 class="fw-bold mb-5">Why Choose Us</h2>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="why-box p-4">
+                    <i class="bi bi-shield-check display-5 mb-3"></i>
+                    <h5>Trusted Service</h5>
+                    <p>Transparent deals with complete documentation support.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="why-box p-4">
+                    <i class="bi bi-geo-alt display-5 mb-3"></i>
+                    <h5>Prime Locations</h5>
+                    <p>Carefully selected properties in premium areas.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="why-box p-4">
+                    <i class="bi bi-people display-5 mb-3"></i>
+                    <h5>Expert Support</h5>
+                    <p>Dedicated assistance from property inquiry to closing.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CALL TO ACTION -->
+<section class="about-cta py-5 text-center">
+    <div class="container">
+        <h3 class="fw-bold text-white">
+            Ready to Find Your Dream Property?
+        </h3>
+        <a href="/properties/" class="btn btn-gold mt-4 px-4">
+            Browse Properties
+        </a>
+    </div>
+</section>
 
 {% endblock %}

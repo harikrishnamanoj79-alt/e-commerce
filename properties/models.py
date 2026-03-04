@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 
-from django.db import models
-from django.utils.text import slugify
+
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -17,6 +17,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+from django.contrib.auth.models import User
 
 class Property(models.Model):
 
@@ -40,15 +42,24 @@ class Property(models.Model):
     location = models.CharField(max_length=200)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='properties')
+
+    # 🔥 ADD THIS
+    agent = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='properties',
+        null=True,
+        blank=True
+    )
+
     listing_type = models.CharField(max_length=20, choices=LISTING_TYPE)
 
     bedrooms = models.IntegerField(default=0)
     bathrooms = models.IntegerField(default=0)
     area = models.IntegerField(help_text="Area in sqft")
-    
+
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    
 
     featured_image = models.ImageField(upload_to='properties/')
     is_featured = models.BooleanField(default=False)
@@ -60,11 +71,40 @@ class Property(models.Model):
         return self.title
     
 class PropertyImage(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+
     image = models.ImageField(upload_to='property_gallery/')
 
     def __str__(self):
         return self.property.title
+
+
+class SpecificationField(models.Model):
+
+    FIELD_TYPES = [
+        ('text', 'Text'),
+        ('number', 'Number'),
+        ('boolean', 'Boolean'),
+    ]
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='spec_fields')
+    name = models.CharField(max_length=100)
+    field_type = models.CharField(max_length=20, choices=FIELD_TYPES)
+
+    def __str__(self):
+        return f"{self.name} ({self.category.name})"
     
+class PropertySpecification(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='specifications')
+    field = models.ForeignKey(SpecificationField, on_delete=models.CASCADE)
 
+    value_text = models.CharField(max_length=255, blank=True, null=True)
+    value_number = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    value_boolean = models.BooleanField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.property.title} - {self.field.name}"

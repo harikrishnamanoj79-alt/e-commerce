@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="admin-wrapper">
+
+    <!-- Overlay -->
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="admin-layout">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="admin-sidebar" id="adminSidebar">
+
+            <div class="sidebar-header">
+                <h5>Admin Panel</h5>
+                <button class="sidebar-close d-md-none" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <nav class="admin-menu">
+                <a href="{% url 'admin_dashboard' %}" class="admin-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a href="{% url 'admin_categories' %}" class="admin-link">
+                    <i class="bi bi-tags"></i> Categories
+                </a>
+
+                <a href="{% url 'admin_properties' %}" class="admin-link active">
+                    <i class="bi bi-building"></i> Properties
+                </a>
+
+                <a href="{% url 'admin_agents' %}" class="admin-link">
+                    <i class="bi bi-people"></i> Agents
+                </a>
+
+                <a href="{% url 'admin_spec_fields' %}" class="admin-link">
+                    <i class="bi bi-sliders"></i> Specification Fields
+                </a>
+
+                <a href="{% url 'admin_property_specs' %}" class="admin-link">
+                    <i class="bi bi-list-check"></i> Property Specs
+                </a>
+
+                <a href="/admin/" class="admin-link">
+                    <i class="bi bi-gear"></i> Django Admin
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="admin-content">
+
+            <!-- MOBILE HEADER -->
+            <div class="admin-mobile-header d-md-none">
+                <button onclick="toggleSidebar()" class="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h6 class="mb-0">Add Property</h6>
+            </div>
+
+            <div class="container-fluid py-4">
+
+                <h2 class="fw-bold mb-4">Add Property</h2>
+
+                <div class="admin-card p-4">
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="title"
+                                       class="form-control"
+                                       placeholder="Property Title" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="slug"
+                                       class="form-control"
+                                       placeholder="Slug" required>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <textarea name="description"
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Description"
+                                          required></textarea>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="number" name="price"
+                                       class="form-control"
+                                       placeholder="Price" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="location"
+                                       class="form-control"
+                                       placeholder="Location" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <select name="category"
+                                        class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">
+                                        {{ cat.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <select name="listing_type"
+                                        class="form-control" required>
+                                    <option value="Sale">Sale</option>
+                                    <option value="Rent">Rent</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number" name="bedrooms"
+                                       class="form-control"
+                                       placeholder="Bedrooms">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number" name="bathrooms"
+                                       class="form-control"
+                                       placeholder="Bathrooms">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <input type="number" name="area"
+                                       class="form-control"
+                                       placeholder="Area (sqft)">
+                            </div>
+
+                            <!-- Specifications -->
+                            <div class="col-12 mt-3">
+                                <h5 class="fw-bold text-white">Specifications</h5>
+                                <div id="dynamic-spec-fields"></div>
+                            </div>
+
+                            <!-- Featured Image -->
+                            <div class="col-12 mt-3 mb-4">
+                                <label class="form-label text-white">Featured Image</label>
+                                <input type="file"
+                                       name="featured_image"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                            <!-- Gallery Images -->
+                            <div class="col-12 mb-4">
+                                <label class="form-label text-white">Gallery Images</label>
+                                <input type="file"
+                                       name="gallery_images"
+                                       class="form-control"
+                                       multiple>
+                                <small class="form-label text-white">
+                                    You can select multiple images
+                                </small>
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn-add-property w-100">
+                                    Add Property
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("adminSidebar").classList.toggle("active");
+    document.getElementById("adminOverlay").classList.toggle("active");
+}
+</script>
+
+{% endblock %}
