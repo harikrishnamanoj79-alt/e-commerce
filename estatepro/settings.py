@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'bookings',
     'pages',
     'accounts',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 
@@ -140,12 +142,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # MEDIA FILES
 # =====================================================
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # =====================================================
 # DEFAULT PRIMARY KEY
 # =====================================================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import cloudinary
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dxfbrubyj',
+    'API_KEY': '347828243962665',
+    'API_SECRET': '2zrrQsBvhGShfFLF8-3wKnetcE4'
+}
