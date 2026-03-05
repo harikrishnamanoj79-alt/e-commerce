@@ -11,7 +11,7 @@ django.setup()
 cloudinary.config(
     cloud_name="dxfbrubyj",
     api_key="347828243962665",
-    api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4",
+    api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4"
 )
 
 from properties.models import Property, PropertyImage, Category
@@ -27,8 +27,8 @@ def upload_image(image_field):
         if os.path.exists(file_path):
             result = cloudinary.uploader.upload(file_path)
 
-            # Save only the public_id
-            image_field.name = result["public_id"]
+            # Store the full secure URL
+            image_field.name = result["secure_url"]
 
             print("Uploaded:", result["secure_url"])
 
