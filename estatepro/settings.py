@@ -119,34 +119,38 @@ USE_TZ = True
 # STATIC FILES
 # =====================================================
 
+# =====================================================
+# STATIC FILES
+# =====================================================
+
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
-
-
-
-# =========================
-# CLOUDINARY STORAGE
-# =========================
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 
 
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": "dxfbrubyj",
-    "API_KEY": "347828243962665",
-    "API_SECRET": "2zrrQsBvhGShfFLF8-3wKnetcE4",
-}
-
+# Django 6 storage system
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
+}
+
+
+# =====================================================
+# CLOUDINARY
+# =====================================================
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "dxfbrubyj",
+    "API_KEY": "347828243962665",
+    "API_SECRET": os.environ.get("2zrrQsBvhGShfFLF8-3wKnetcE4"),
 }

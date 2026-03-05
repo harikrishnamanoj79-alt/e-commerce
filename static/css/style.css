@@ -129,7 +129,7 @@ footer a:hover {
 
 .hero-section{
     height:85vh;
-    background:url("/static/images/ChatGPT\ Image\ Feb\ 26\,\ 2026\,\ 11_38_41\ AM.png") center/cover no-repeat;
+    background:url("../images/hero.png") center/cover no-repeat;
     position:relative;
 }
 
