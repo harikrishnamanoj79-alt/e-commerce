@@ -135,21 +135,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # CLOUDINARY STORAGE (MEDIA FILES)
 # =====================================================
 
-# =====================================================
-# CLOUDINARY STORAGE (MEDIA FILES)
-# =====================================================
 
-
-# Cloudinary configuration
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
-cloudinary.config(
-    cloud_name="dxfbrubyj",
-    api_key="347828243962665",
-    api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4",
-    secure=True
-)
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+CLOUDINARY_STORAGE = {
+    "CLOUDINARY_URL": os.environ.get("CLOUDINARY_URL")
+}
