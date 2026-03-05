@@ -139,18 +139,17 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # CLOUDINARY STORAGE (MEDIA FILES)
 # =====================================================
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": "dxfbrubyj",
-    "API_KEY": "347828243962665",
-    "API_SECRET": "2zrrQsBvhGShfFLF8-3wKnetcE4",
-}
+# Cloudinary configuration
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-# Optional but recommended
 cloudinary.config(
     cloud_name="dxfbrubyj",
     api_key="347828243962665",
     api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4",
     secure=True
 )
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
