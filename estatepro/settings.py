@@ -156,7 +156,7 @@ import cloudinary
 
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('dxfbrubyj'),
-    'API_KEY': os.environ.get('273486285829238'),
-    'API_SECRET': os.environ.get('9_FpN_Y5NYrOzWfSRSUjJ9diE6k'),
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
