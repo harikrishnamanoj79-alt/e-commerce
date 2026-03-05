@@ -20,20 +20,19 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 # =====================================================
 
 INSTALLED_APPS = [
+    'cloudinary_storage', # Move this to the top (above staticfiles)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'cloudinary',         # Keep this here
     # Your Apps
     'properties',
     'bookings',
     'pages',
     'accounts',
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 
@@ -142,6 +141,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # MEDIA FILES
 # =====================================================
 
+
+MEDIA_URL = '/media/'  # Add this line!
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # =====================================================
