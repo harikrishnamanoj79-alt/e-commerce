@@ -131,7 +131,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 # Django 6 storage system
@@ -140,7 +140,7 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        "BACKEND": "whitenoise.storage.StaticFilesStorage"
     },
 }
 
