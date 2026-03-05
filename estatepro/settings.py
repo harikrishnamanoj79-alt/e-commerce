@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -115,42 +114,35 @@ USE_I18N = True
 USE_TZ = True
 
 
-# =====================================================
+# =========================
 # STATIC FILES
-# =====================================================
+# =========================
 
-# =====================================================
+
+# =========================
 # STATIC FILES
-# =====================================================
+# =========================
 
 STATIC_URL = "/static/"
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-# Django 6 storage system
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.StaticFilesStorage"
-    },
-}
+# =========================
+# MEDIA FILES (Cloudinary)
+# =========================
 
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-# =====================================================
-# CLOUDINARY
-# =====================================================
+MEDIA_URL = "/media/"
 
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": "dxfbrubyj",
     "API_KEY": "347828243962665",
-    "API_SECRET": os.environ.get("2zrrQsBvhGShfFLF8-3wKnetcE4"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
