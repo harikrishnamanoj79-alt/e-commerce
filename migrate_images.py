@@ -26,7 +26,10 @@ def upload_image(image_field):
 
         if os.path.exists(file_path):
             result = cloudinary.uploader.upload(file_path)
-            image_field.name = result["public_id"]
+
+            # Store the full secure URL
+            image_field.name = result["secure_url"]
+
             print("Uploaded:", result["secure_url"])
 
     except Exception as e:
