@@ -22,14 +22,16 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com"]
 # =====================================================
 
 INSTALLED_APPS = [
-    "cloudinary_storage",   # must be before staticfiles
+    # Move cloudinary_storage DOWN or use the specific media one
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles", # Standard static files first
+    "cloudinary_storage",          # Move this below staticfiles
     "cloudinary",
+    # ... your apps
 
     # Your apps
     "properties",
