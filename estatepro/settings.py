@@ -130,19 +130,24 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 # =========================
 # MEDIA FILES (Cloudinary)
 # =========================
-
+MEDIA_URL = "/media/"
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-MEDIA_URL = "/media/"
 
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": "dxfbrubyj",
     "API_KEY": "347828243962665",
-    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+    "API_SECRET": "2zrrQsBvhGShfFLF8-3wKnetcE4",
 }
+
+cloudinary.config(
+    cloud_name="dxfbrubyj",
+    api_key="347828243962665",
+    api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4",
+)

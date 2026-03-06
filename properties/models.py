@@ -3,12 +3,13 @@ from django.utils.text import slugify
 
 
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
-    image = models.ImageField(upload_to='category_images/', blank=True, null=True)
+    image = CloudinaryField('image', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -61,7 +62,7 @@ class Property(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
 
-    featured_image = models.ImageField(upload_to='properties/')
+    featured_image = CloudinaryField('image')
     is_featured = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
 
@@ -77,7 +78,7 @@ class PropertyImage(models.Model):
         related_name='images'
     )
 
-    image = models.ImageField(upload_to='property_gallery/')
+    image = CloudinaryField('image')
 
     def __str__(self):
         return self.property.title
