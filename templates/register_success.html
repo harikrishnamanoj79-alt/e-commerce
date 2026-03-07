@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Success</title>
+</head>
+
+<body>
+
+<h3>Owner Registered Successfully</h3>
+
+<script>
+
+    // send phone number to parent window
+    window.opener.document.querySelector("input[name='phone']").value = "{{ phone }}";
+
+    // close popup
+    window.close();
+
+</script>
+
+</body>
+</html>

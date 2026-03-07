@@ -4,10 +4,15 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+from django.db import models
+from django.contrib.auth.models import User
+
+
 class Profile(models.Model):
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, unique=True)   # ✅ UNIQUE
     address = models.TextField()
 
     is_agent = models.BooleanField(default=False)

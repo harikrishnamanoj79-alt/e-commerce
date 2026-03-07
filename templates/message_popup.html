@@ -1,0 +1,33 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+    <div id="successToast" class="toast modern-toast border-0" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="toast-body">
+                ✓ {{ message }}
+            </div>
+            <button type="button" class="btn-close me-2" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.modern-toast{
+    min-width:260px;
+    background:#1f2937;
+    color:#fff;
+    border-radius:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    font-size:14px;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var toastEl = document.getElementById('successToast');
+    if (toastEl) {
+        var toast = new bootstrap.Toast(toastEl,{delay:2500});
+        toast.show();
+    }
+});
+</script>

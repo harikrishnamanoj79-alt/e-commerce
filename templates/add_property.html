@@ -63,6 +63,80 @@
 
             <div class="container-fluid py-4">
 
+                <h2 class="fw-bold mb-4">Add Property owner</h2>
+
+                <div class="admin-card p-4">
+
+                    <form method="GET">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="phone" class="form-control" placeholder="Owner Mobile Number"
+                                    value="{{ phone }}">
+                            </div>
+
+                            <div class="col-md-3">
+                                <button type="submit" class="btn-add-property w-100">
+                                    Search Owner
+                                </button>
+                            </div>
+
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                    data-bs-target="#ownerModal">
+
+                                    Add Owner
+
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                    {% if owner %}
+
+                    <div class="card mt-3 border-success">
+                        <div class="card-body">
+
+                            <h6 class="fw-bold text-success">Owner Found</h6>
+
+                            <p class="mb-1">
+                                <strong>Name:</strong> {{ owner.user.username }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Phone:</strong> {{ owner.phone }}
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Email:</strong> {{ owner.user.email }}
+                            </p>
+
+                        </div>
+                    </div>
+
+
+                    {% elif phone %}
+
+                    <div class="alert alert-danger mt-3">
+                        Owner not found
+                    </div>
+
+                    {% endif %}
+                </div>
+
+            </div>
+
+
+
+
+            {% if owner %}
+
+            <div class="container-fluid py-4">
+
                 <h2 class="fw-bold mb-4">Add Property</h2>
 
                 <div class="admin-card p-4">
@@ -70,76 +144,63 @@
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
+                        {% if owner %}
+                        <input type="hidden" name="owner_phone" value="{{ owner.phone }}">
+                        {% endif %}
+
+
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
-                                <input type="text" name="title"
-                                       class="form-control"
-                                       placeholder="Property Title" required>
+                                <input type="text" name="title" class="form-control" placeholder="Property Title"
+                                    required>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <input type="text" name="slug"
-                                       class="form-control"
-                                       placeholder="Slug" required>
-                            </div>
+
 
                             <div class="col-12 mb-3">
-                                <textarea name="description"
-                                          class="form-control"
-                                          rows="4"
-                                          placeholder="Description"
-                                          required></textarea>
+                                <textarea name="description" class="form-control" rows="4" placeholder="Description"
+                                    required></textarea>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <input type="number" name="price"
-                                       class="form-control"
-                                       placeholder="Price" required>
+                                <input type="number" name="price" class="form-control" placeholder="Price" required>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <input type="text" name="location"
-                                       class="form-control"
-                                       placeholder="Location" required>
+                                <input type="text" name="location" class="form-control" placeholder="Location" required>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <select name="category"
-                                        class="form-control" required>
-                                    <option value="">Select Category</option>
+                                <select id="category-select" name="category" class="form-control" required>
+                                    <option value="" disabled selected>Select Category</option>
+
                                     {% for cat in categories %}
                                     <option value="{{ cat.id }}">
                                         {{ cat.name }}
                                     </option>
                                     {% endfor %}
+
                                 </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <select name="listing_type"
-                                        class="form-control" required>
+                                <select name="listing_type" class="form-control" required>
                                     <option value="Sale">Sale</option>
                                     <option value="Rent">Rent</option>
                                 </select>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <input type="number" name="bedrooms"
-                                       class="form-control"
-                                       placeholder="Bedrooms">
+                                <input type="number" name="bedrooms" class="form-control" placeholder="Bedrooms">
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <input type="number" name="bathrooms"
-                                       class="form-control"
-                                       placeholder="Bathrooms">
+                                <input type="number" name="bathrooms" class="form-control" placeholder="Bathrooms">
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <input type="number" name="area"
-                                       class="form-control"
-                                       placeholder="Area (sqft)">
+                                <input type="number" name="area" class="form-control" placeholder="Area (sqft)">
                             </div>
 
                             <!-- Specifications -->
@@ -151,19 +212,13 @@
                             <!-- Featured Image -->
                             <div class="col-12 mt-3 mb-4">
                                 <label class="form-label text-white">Featured Image</label>
-                                <input type="file"
-                                       name="featured_image"
-                                       class="form-control"
-                                       required>
+                                <input type="file" name="featured_image" class="form-control" required>
                             </div>
 
                             <!-- Gallery Images -->
                             <div class="col-12 mb-4">
                                 <label class="form-label text-white">Gallery Images</label>
-                                <input type="file"
-                                       name="gallery_images"
-                                       class="form-control"
-                                       multiple>
+                                <input type="file" name="gallery_images" class="form-control" multiple>
                                 <small class="form-label text-white">
                                     You can select multiple images
                                 </small>
@@ -182,6 +237,7 @@
                 </div>
 
             </div>
+            {% endif %}
 
         </main>
 
@@ -189,11 +245,95 @@
 
 </section>
 
+<!-- Add Owner Modal -->
+<div class="modal fade" id="ownerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Property Owner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                {% include "register_box.html" %}
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
 <script>
-function toggleSidebar() {
-    document.getElementById("adminSidebar").classList.toggle("active");
-    document.getElementById("adminOverlay").classList.toggle("active");
-}
+
+    function toggleSidebar() {
+        document.getElementById("adminSidebar").classList.toggle("active");
+        document.getElementById("adminOverlay").classList.toggle("active");
+    }
+
+    function openOwnerPopup() {
+
+        const popup = document.getElementById("ownerPopup");
+        const frame = document.getElementById("ownerFrame");
+
+        popup.style.display = "flex";
+        frame.src = "/accounts/register/?popup=1";
+
+    }
+
+    function closeOwnerPopup() {
+
+        document.getElementById("ownerPopup").style.display = "none";
+
+    }
 </script>
+<script>
+document.addEventListener("submit", function(e){
+
+    if(e.target && e.target.id === "ownerRegisterForm"){
+
+        e.preventDefault();
+
+        let form = e.target;
+        let formData = new FormData(form);
+
+        fetch(form.action,{
+            method:"POST",
+            body:formData
+        })
+        .then(res => res.text())
+        .then(html => {
+
+            // replace modal body with returned html
+            document.querySelector("#ownerModal .modal-body").innerHTML = html;
+
+            // check success flag
+            if(html.includes('data-success="true"')){
+
+                setTimeout(function(){
+
+                    let modalElement = document.getElementById("ownerModal");
+                    let modal = bootstrap.Modal.getInstance(modalElement);
+
+                    if(modal){
+                        modal.hide();
+                    }
+
+                },600);
+
+            }
+
+        });
+
+    }
+
+});
+</script>
+
 
 {% endblock %}

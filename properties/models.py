@@ -4,6 +4,7 @@ from django.utils.text import slugify
 
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
+from .models import *
 
 
 class Category(models.Model):
@@ -20,6 +21,11 @@ class Category(models.Model):
         return self.name
 
 from django.contrib.auth.models import User
+
+from django.db import models
+from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
+
 
 class Property(models.Model):
 
@@ -42,13 +48,27 @@ class Property(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2)
     location = models.CharField(max_length=200)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='properties')
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='properties'
+    )
 
-    # 🔥 ADD THIS
+    # ⭐ PROPERTY OWNER (Customer)
+    owner = models.ForeignKey(
+    User,
+    on_delete=models.CASCADE,
+    related_name='owned_properties',
+    null=True,
+    blank=True
+    )
+    
+
+    # ⭐ AGENT
     agent = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='properties',
+        related_name='agent_properties',
         null=True,
         blank=True
     )
@@ -63,6 +83,7 @@ class Property(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
 
     featured_image = CloudinaryField('image')
+
     is_featured = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
 

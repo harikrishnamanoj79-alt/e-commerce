@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "qir_bs%$%hf!*8vr+&a(!0gup4$r%!p*cdhp3
 
 DEBUG = os.environ.get("DEBUG") == "True"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com","flon.in","www.flon.in",]
 
 
 # =====================================================
@@ -152,3 +152,6 @@ cloudinary.config(
     api_key="347828243962665",
     api_secret="2zrrQsBvhGShfFLF8-3wKnetcE4",
 )
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SECURE_BROWSER_XSS_FILTER = False

@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin-dashboard/edit-property/<int:pk>/', views.admin_edit_property, name='admin_edit_property'),
     path('admin-dashboard/delete-property/<int:pk>/',views.admin_delete_property,name='admin_delete_property'),
     path('profile/', views.profile_view, name='profile'),
+    path('admin-dashboard/property/<int:pk>/',views.admin_property_detail,name='admin_property_detail')
     
 ]

@@ -1,193 +1,152 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const categorySelect = document.querySelector("select[name='category']");
+    /* ================= CATEGORY SPECIFICATIONS ================= */
+
+    const categorySelect = document.getElementById("category-select");
     const specContainer = document.getElementById("dynamic-spec-fields");
 
-    categorySelect.addEventListener("change", function() {
+    if (categorySelect && specContainer) {
 
-        const categoryId = this.value;
+        function loadSpecs(categoryId) {
 
-        if (!categoryId) {
-            specContainer.innerHTML = "";
-            return;
+            if (!categoryId) {
+                specContainer.innerHTML = "";
+                return;
+            }
+
+            fetch(`/properties/get-specs/?category_id=${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+
+                specContainer.innerHTML = "";
+
+                if (!data.fields) return;
+
+                data.fields.forEach(field => {
+
+                    let html = "";
+
+                    if (field.type === "text") {
+                        html = `
+                        <div class="mb-3">
+                            <label class="form-label">${field.name}</label>
+                            <input type="text"
+                                   name="spec_${field.id}"
+                                   class="form-control">
+                        </div>`;
+                    }
+
+                    if (field.type === "number") {
+                        html = `
+                        <div class="mb-3">
+                            <label class="form-label">${field.name}</label>
+                            <input type="number"
+                                   name="spec_${field.id}"
+                                   class="form-control">
+                        </div>`;
+                    }
+
+                    if (field.type === "boolean") {
+                        html = `
+                        <div class="form-check mb-3">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="spec_${field.id}">
+                            <label class="form-check-label">
+                                ${field.name}
+                            </label>
+                        </div>`;
+                    }
+
+                    specContainer.insertAdjacentHTML("beforeend", html);
+
+                });
+
+            })
+            .catch(error => console.error("Spec loading error:", error));
         }
 
-        fetch(`/properties/get-specs/?category_id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
+        categorySelect.addEventListener("change", function () {
+            loadSpecs(this.value);
+        });
 
-                specContainer.innerHTML = "";
-
-                data.fields.forEach(field => {
-
-                    let inputField = "";
-
-                    if (field.type === "text") {
-                        inputField = `<input type="text" name="spec_${field.id}" class="form-control mb-3" placeholder="${field.name}">`;
-                    }
-
-                    if (field.type === "number") {
-                        inputField = `<input type="number" name="spec_${field.id}" class="form-control mb-3" placeholder="${field.name}">`;
-                    }
-
-                    if (field.type === "boolean") {
-                        inputField = `
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="spec_${field.id}">
-                                <label class="form-check-label">${field.name}</label>
-                            </div>
-                        `;
-                    }
-
-                    specContainer.innerHTML += inputField;
-                });
-
-            });
-    });
-
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const categorySelect = document.getElementById("category-select");
-    const specContainer = document.getElementById("dynamic-spec-fields");
-
-    categorySelect.addEventListener("change", function () {
-
-        const categoryId = this.value;
-        specContainer.innerHTML = "";
-
-        if (!categoryId) return;
-
-        fetch(`/properties/get-specs/?category_id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
-
-                data.fields.forEach(field => {
-
-                    let fieldHTML = "";
-
-                    if (field.type === "text") {
-                        fieldHTML = `
-                            <div class="mb-3">
-                                <label class="form-label">${field.name}</label>
-                                <input type="text"
-                                       name="spec_${field.id}"
-                                       class="form-control">
-                            </div>
-                        `;
-                    }
-
-                    if (field.type === "number") {
-                        fieldHTML = `
-                            <div class="mb-3">
-                                <label class="form-label">${field.name}</label>
-                                <input type="number"
-                                       name="spec_${field.id}"
-                                       class="form-control">
-                            </div>
-                        `;
-                    }
-
-                    if (field.type === "boolean") {
-                        fieldHTML = `
-                            <div class="form-check mb-3">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       name="spec_${field.id}">
-                                <label class="form-check-label">
-                                    ${field.name}
-                                </label>
-                            </div>
-                        `;
-                    }
-
-                    specContainer.insertAdjacentHTML("beforeend", fieldHTML);
-                });
-
-            });
-
-    });
-
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const categorySelect = document.getElementById("category-select");
-    const specContainer = document.getElementById("dynamic-spec-fields");
-
-    function loadSpecs(categoryId) {
-
-        fetch(`/properties/get-specs/?category_id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
-
-                specContainer.innerHTML = "";
-
-                data.fields.forEach(field => {
-
-                    let value = "{{ spec_values|safe }}";
-                });
-            });
+        /* Load specs automatically if category already selected (Edit page) */
+        if (categorySelect.value) {
+            loadSpecs(categorySelect.value);
+        }
     }
 
-    loadSpecs(categorySelect.value);
-
-});
 
 
+    /* ================= PROPERTY SEARCH ================= */
 
-function changeMainImage(imageUrl) {
-    document.getElementById("mainPropertyImage").src = imageUrl;
-}
+    const searchInput = document.getElementById("propertySearch");
+    const suggestionBox = document.getElementById("searchSuggestions");
 
+    if (searchInput && suggestionBox) {
 
-const searchInput = document.getElementById("propertySearch");
-const suggestionBox = document.getElementById("searchSuggestions");
+        searchInput.addEventListener("keyup", function(){
 
-searchInput.addEventListener("keyup", function(){
+            let query = this.value;
 
-    let query = this.value;
+            if(query.length < 2){
+                suggestionBox.innerHTML = "";
+                return;
+            }
 
-    if(query.length < 2){
-        suggestionBox.innerHTML = "";
-        return;
-    }
+            fetch(`/properties/search-suggestions/?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
 
-    fetch(`/properties/search-suggestions/?q=${query}`)
+                let html = "";
 
-    .then(response => response.json())
+                data.forEach(item => {
+                    html += `<div class="suggestion-item">${item}</div>`;
+                });
 
-    .then(data => {
+                suggestionBox.innerHTML = html;
 
-        let html = "";
-
-        data.forEach(item => {
-
-            html += `
-            <div class="suggestion-item">
-                ${item}
-            </div>
-            `;
+            })
+            .catch(error => console.error("Search error:", error));
 
         });
 
-        suggestionBox.innerHTML = html;
+    }
+
+
+
+    /* ================= CLICK SUGGESTION ================= */
+
+    document.addEventListener("click", function(e){
+
+        if(e.target.classList.contains("suggestion-item")){
+
+            const searchInput = document.getElementById("propertySearch");
+            const suggestionBox = document.getElementById("searchSuggestions");
+
+            if(searchInput){
+                searchInput.value = e.target.innerText;
+            }
+
+            if(suggestionBox){
+                suggestionBox.innerHTML = "";
+            }
+
+        }
 
     });
 
 });
 
 
-document.addEventListener("click", function(e){
+/* ================= IMAGE CHANGE ================= */
 
-if(e.target.classList.contains("suggestion-item")){
+function changeMainImage(imageUrl) {
 
-searchInput.value = e.target.innerText;
-suggestionBox.innerHTML = "";
+    const img = document.getElementById("mainPropertyImage");
+
+    if(img){
+        img.src = imageUrl;
+    }
 
 }
-
-});

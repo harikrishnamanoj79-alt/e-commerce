@@ -5,10 +5,29 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
+
+
+
+
+from django.contrib.auth.models import User
+from django.shortcuts import render
+from django.db import IntegrityError
+from .models import Profile
+
+from django.contrib import messages
+
+from django.contrib import messages
+from django.db import IntegrityError, transaction
+from django.shortcuts import render
+from django.contrib.auth.models import User
 from .models import Profile
 
 def register_view(request):
+
+    popup = request.GET.get("popup")
+
     if request.method == "POST":
+
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -17,26 +36,37 @@ def register_view(request):
 
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists")
-            return redirect('register')
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
+        elif Profile.objects.filter(phone=phone).exists():
+            messages.error(request, "Phone number already registered")
 
-        # Update profile fields
-        user.profile.phone = phone
-        user.profile.address = address
-        user.profile.save()
+        else:
+            try:
+                with transaction.atomic():
 
-        login(request, user)
-        return redirect('home')
+                    user = User.objects.create_user(
+                        username=username,
+                        email=email,
+                        password=password
+                    )
 
-    return render(request, 'register.html')
+                    Profile.objects.create(
+                        user=user,
+                        phone=phone,
+                        address=address
+                    )
 
+                return render(request, "register_box.html", {
+                    "success": True
+                })
 
+            except IntegrityError:
+                messages.error(request, "Phone number already registered")
 
+    if popup:
+        return render(request, "register_box.html")
+
+    return render(request, "register.html")
 
 
 def login_view(request):
@@ -276,18 +306,51 @@ def admin_add_property_spec(request):
 from properties.models import Property,Category,SpecificationField,PropertySpecification,PropertyImage
 
 
+
+
 @login_required
 def admin_add_property(request):
 
     if not request.user.is_superuser:
         return redirect('home')
 
+    owner = None
+    phone = request.GET.get('phone')
+
+    # 🔎 Search owner using phone
+    if phone:
+        owner = Profile.objects.filter(phone=phone).first()
+
     if request.method == "POST":
 
+        owner_phone = request.POST.get('owner_phone')
+        owner_profile = Profile.objects.filter(phone=owner_phone).first()
+
+        if not owner_profile:
+            return render(request, 'add_property.html', {
+                'categories': Category.objects.all(),
+                'owner': None,
+                'phone': phone,
+                'error': "Owner not found. Please add owner first."
+            })
+
+        from django.utils.text import slugify
+        from django.utils import timezone
+
+        # create auto slug
+        category_id = request.POST.get('category')
+        category = Category.objects.get(id=category_id)
+
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+
+        cat_short = slugify(category.name)[:3]   # first 3 letters
+        auto_slug = f"{cat_short}-{timestamp}"
+        
         # 🔥 Create property
         property_instance = Property.objects.create(
+            owner=owner_profile.user,
             title=request.POST.get('title'),
-            slug=request.POST.get('slug'),
+            slug=auto_slug,
             description=request.POST.get('description'),
             price=request.POST.get('price'),
             location=request.POST.get('location'),
@@ -300,7 +363,7 @@ def admin_add_property(request):
             is_available=True
         )
 
-        # 🔥 Save Dynamic Specification Fields
+        # 🔥 Save specification fields
         for key, value in request.POST.items():
 
             if key.startswith("spec_"):
@@ -324,7 +387,7 @@ def admin_add_property(request):
 
                 spec.save()
 
-        # 🔥 Save Multiple Gallery Images
+        # 🔥 Save gallery images
         gallery_images = request.FILES.getlist('gallery_images')
 
         for img in gallery_images:
@@ -336,9 +399,10 @@ def admin_add_property(request):
         return redirect('admin_properties')
 
     return render(request, 'add_property.html', {
-        'categories': Category.objects.all()
+        'categories': Category.objects.all(),
+        'owner': owner,
+        'phone': phone
     })
-    
     
 from django.shortcuts import get_object_or_404
 from properties.models import Property, Category, SpecificationField, PropertySpecification
@@ -543,4 +607,22 @@ def profile_view(request):
     return render(request, 'profile.html', {
         'profile': profile,
         'bookings': bookings
+    })
+    
+    
+@login_required
+def admin_property_detail(request, pk):
+
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    property = get_object_or_404(Property, pk=pk)
+
+    specs = PropertySpecification.objects.filter(
+        property=property
+    ).select_related('field')
+
+    return render(request, 'admin_property_detail.html', {
+        'property': property,
+        'specs': specs
     })

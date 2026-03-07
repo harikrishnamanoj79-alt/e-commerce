@@ -188,8 +188,17 @@ def agent_add_property(request):
 
 
 
+from django.http import JsonResponse
+from .models import SpecificationField
+
+
 def get_category_specifications(request):
+
     category_id = request.GET.get('category_id')
+
+    # If no category selected, return empty list
+    if not category_id:
+        return JsonResponse({'fields': []})
 
     fields = SpecificationField.objects.filter(category_id=category_id)
 
