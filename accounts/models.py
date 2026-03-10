@@ -12,14 +12,15 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    phone = models.CharField(max_length=20, unique=True)   # ✅ UNIQUE
-    address = models.TextField()
+    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
+
+    address = models.TextField(blank=True, null=True)   # ✅ add this
 
     is_agent = models.BooleanField(default=False)
 
     profile_image = models.ImageField(upload_to='agents/', blank=True, null=True)
     bio = models.TextField(blank=True)
-
+    
     def __str__(self):
         return self.user.username
 

@@ -726,3 +726,46 @@ def change_user_role(request, user_id):
     profile.save()
 
     return redirect('admin_users')
+
+
+from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import Profile
+
+@login_required
+def admin_add_agent(request):
+
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        phone = request.POST.get("phone")
+
+        # check username
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists")
+            return redirect("admin_add_agent")
+
+        # check phone
+        if phone and Profile.objects.filter(phone=phone).exists():
+            messages.error(request, "Phone already exists")
+            return redirect("admin_add_agent")
+
+        # create user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # update profile
+        profile = Profile.objects.get(user=user)
+        profile.phone = phone
+        profile.is_agent = True
+        profile.save()
+
+        messages.success(request, "Agent created successfully")
+        return redirect("admin_agents")
+
+    return render(request, "admin_add_agent.html")

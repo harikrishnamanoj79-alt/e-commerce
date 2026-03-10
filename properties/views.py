@@ -21,39 +21,60 @@ from num2words import num2words
 from django.db.models import Q
 import re
 
+import re
+from django.db.models import Q
+from num2words import num2words
+from properties.models import Property, Category
+
+
 def property_list(request):
 
     properties = Property.objects.filter(is_available=True)
     categories = Category.objects.all()
 
     # -----------------------
-    # 🔍 Keyword Search
+    # 🔍 Smart Keyword Search
     # -----------------------
 
     query = request.GET.get('q')
 
     if query:
 
+        query = query.strip()
         query_lower = query.lower()
 
+        # 🔹 Search in multiple fields
         properties = properties.filter(
             Q(title__icontains=query) |
-            Q(description__icontains=query)
+            Q(description__icontains=query) |
+            Q(location__icontains=query) |
+            Q(category__name__icontains=query)
         )
 
-        # bedroom search (3bhk / 3 bedroom)
+        # -----------------------
+        # 🏠 Bedroom search
+        # -----------------------
+
         bedroom_match = re.search(r'(\d+)\s*(bhk|bedroom)', query_lower)
+
         if bedroom_match:
             bedrooms = int(bedroom_match.group(1))
             properties = properties.filter(bedrooms=bedrooms)
 
-        # price search (under 20000000)
+        # -----------------------
+        # 💰 Price search
+        # -----------------------
+
         under_match = re.search(r'under\s*(\d+)', query_lower)
+
         if under_match:
             price = int(under_match.group(1))
             properties = properties.filter(price__lte=price)
 
-        # location search
+        # -----------------------
+        # 📍 Location search
+        # -----------------------
+
         if " in " in query_lower:
             location = query_lower.split(" in ")[1]
             properties = properties.filter(location__icontains=location)
@@ -63,6 +84,7 @@ def property_list(request):
     # -----------------------
 
     location = request.GET.get('location')
+
     if location:
         properties = properties.filter(location__icontains=location)
 
@@ -71,6 +93,7 @@ def property_list(request):
     # -----------------------
 
     category_slug = request.GET.get('category')
+
     if category_slug:
         properties = properties.filter(category__slug=category_slug)
 
@@ -79,23 +102,28 @@ def property_list(request):
     # -----------------------
 
     min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
     if min_price:
         properties = properties.filter(price__gte=min_price)
 
-    max_price = request.GET.get('max_price')
     if max_price:
         properties = properties.filter(price__lte=max_price)
 
+    # -----------------------
     # 🔹 Convert price to words
+    # -----------------------
+
     for p in properties:
         p.price_words = num2words(p.price, lang='en_IN').title()
 
     context = {
-        'properties': properties,
-        'categories': categories,
+        "properties": properties,
+        "categories": categories,
+        "query": query
     }
 
-    return render(request, 'property_list.html', context)
+    return render(request, "property_list.html", context)
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages

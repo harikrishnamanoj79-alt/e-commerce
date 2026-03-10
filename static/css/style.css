@@ -128,11 +128,15 @@ footer a:hover {
 /* ================= HERO SECTION ================= */
 
 .hero-section{
-    height:85vh;
-    background:url("../images/ChatGPT\ Image\ Mar\ 9\,\ 2026\,\ 03_15_53\ PM.png") top/cover no-repeat;
+    min-height:85vh;
+    background-image:url("../images/ChatGPT Image Mar 9, 2026, 03_15_53 PM.png");
+    background-size:cover;
+    background-position:top;
+    background-repeat:no-repeat;
     position:relative;
+    display:flex;
+    align-items:center;
 }
-
 
 /* Dark overlay */
 .hero-section::before{
@@ -240,9 +244,6 @@ footer a:hover {
     font-size:16px;
 }
 
-.hero-section{
-    height:70vh;
-}
 
 }
 
@@ -258,6 +259,15 @@ footer a:hover {
 
 .btn-gold{
     width:100%;
+}
+
+}
+
+@media (max-width:768px){
+
+.hero-section{
+    min-height:60vh;
+    background-position:center;
 }
 
 }
@@ -2445,3 +2455,48 @@ background:#0b5ed7;
 }
 
 }
+
+
+/* Price header */
+
+.price-header{
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    padding-bottom:15px;
+}
+
+/* Category badge */
+
+.category-badge{
+    background:#f8c146;
+    color:#1f2d3d;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:6px;
+}
+
+/* Price */
+
+.property-price{
+    color:#f8c146;
+    font-size:32px;
+}
+
+/* Price words */
+
+.price-words{
+    color:#d1d5db;
+    font-size:14px;
+}
+
+@media (max-width:768px){
+
+.property-price{
+    font-size:26px;
+}
+
+.price-words{
+    font-size:13px;
+}
+
+}
+

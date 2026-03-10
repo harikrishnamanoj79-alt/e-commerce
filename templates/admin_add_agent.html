@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<section class="admin-wrapper py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-6">
+
+                <div class="admin-card p-4">
+
+                    <h3 class="fw-bold mb-4 text-center">Add Agent</h3>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control admin-input"
+                                placeholder="Enter username" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control admin-input" placeholder="Enter email">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control admin-input"
+                                placeholder="Enter password" required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-4">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control admin-input"
+                                placeholder="Enter phone number">
+                        </div>
+
+                        <!-- Submit -->
+                        <button class="btn-gold w-100">
+                            Create Agent
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

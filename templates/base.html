@@ -167,7 +167,7 @@
 
                 <!-- About -->
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <h5 class="footer-title">EstatePro</h5>
+                    <h5 class="footer-title">FLON</h5>
                     <p>
                         Your trusted real estate partner in Kochi.
                         We help you buy, sell, and invest in premium properties
@@ -187,13 +187,26 @@
                 </div>
 
                 <!-- Property Types -->
+                <!-- Property Types -->
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h6 class="footer-heading">Property Types</h6>
+
                     <ul class="footer-links">
-                        <li><a href="#">Villas</a></li>
-                        <li><a href="#">Apartments</a></li>
-                        <li><a href="/properties/?category=commercial-properties">Commercial</a></li>
-                        <li><a href="#">Plots</a></li>
+
+                        {% for category in categories %}
+
+                        <li>
+                            <a href="/properties/?category={{ category.slug }}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+
+                        {% empty %}
+
+                        <li>No categories available</li>
+
+                        {% endfor %}
+
                     </ul>
                 </div>
 
