@@ -78,7 +78,11 @@
                             <i class="bi bi-geo-alt"></i> {{ property.location }}
                         </p>
 
-                        <h6 class="price mb-3">₹ {{ property.price }}</h6>
+                        <h6 class="price mb-1">₹ {{ property.price }}</h6>
+
+<small class="text-white">
+({{ property.price_words }} Rupees)
+</small>
 
                         <a href="{% url 'property_detail' property.slug %}" class="btn btn-dark w-100">
                             View Details

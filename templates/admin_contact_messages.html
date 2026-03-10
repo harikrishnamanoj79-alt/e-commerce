@@ -69,45 +69,27 @@
 
             <div class="container-fluid py-4">
 
-                <h2 class="fw-bold mb-4">Dashboard Overview</h2>
+                <h2 class="fw-bold mb-4">Contact Messages</h2>
 
                 <!-- STAT CARDS -->
-                <div class="row g-4">
 
-                    <div class="col-md-4 col-sm-6">
-                        <div class="admin-card text-center">
-                            <h6>Total Properties</h6>
-                            <h2>{{ total_properties }}</h2>
-                        </div>
+                <div class="admin-card p-4">
+
+                    {% for message in messages %}
+
+                    <div class="border p-3 mb-3 rounded">
+
+                        <strong>{{ message.name }}</strong>
+
+                        <p>{{ message.email }}</p>
+
+                        <p>{{ message.message }}</p>
+
+                        <small>{{ message.created_at }}</small>
+
                     </div>
 
-                    <div class="col-md-4 col-sm-6">
-                        <div class="admin-card text-center">
-                            <h6>Available</h6>
-                            <h2>{{ total_available }}</h2>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="admin-card text-center">
-                            <h6>Categories</h6>
-                            <h2>{{ total_categories }}</h2>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="admin-card text-center">
-                            <h6>Agents</h6>
-                            <h2>{{ total_agents }}</h2>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="admin-card text-center">
-                            <h6>Bookings</h6>
-                            <h2>{{ total_bookings }}</h2>
-                        </div>
-                    </div>
+                    {% endfor %}
 
                 </div>
 

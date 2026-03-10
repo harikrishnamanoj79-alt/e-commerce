@@ -52,10 +52,11 @@
                     <small>{{ property.location }}</small>
                 </div>
 
-                <a href="{% url 'property_detail' property.slug %}"
-                   class="btn btn-outline-gold btn-sm mt-3 mt-md-0">
-                    View
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'agent_property_detail' property.id %}" class="btn btn-outline-warning btn-sm">View</a>
+                    <a href="{% url 'agent_edit_property' property.id %}" class="btn btn-outline-warning btn-sm">Edit</a>
+                </div>
+
             </div>
         </div>
         {% empty %}
@@ -65,21 +66,80 @@
         <hr class="divider my-5">
 
         <!-- BOOKINGS -->
-        <h4 class="section-title">Recent Bookings</h4>
 
-        {% for booking in recent_bookings %}
-        <div class="dashboard-list-card p-3 mb-2">
-            <strong>{{ booking.name }}</strong>
-            <p class="mb-1">
-                Property: {{ booking.property.title }}
-            </p>
-            <small>Visit Date: {{ booking.visit_date }}</small>
-        </div>
-        {% empty %}
-        <p class="text-light">No bookings yet.</p>
-        {% endfor %}
+<h4 class="section-title">Recent Bookings</h4>
 
-    </div>
+{% for booking in recent_bookings %}
+
+<div class="dashboard-list-card p-3 mb-3">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<strong>{{ booking.name }}</strong>
+
+<p class="mb-1">
+Property: <b>{{ booking.property.title }}</b>
+</p>
+
+<p class="mb-1">
+Phone: {{ booking.phone }}
+</p>
+
+<p class="mb-1">
+Visit Date: {{ booking.visit_date }}
+</p>
+
+<p class="mb-1">
+Message: {{ booking.message }}
+</p>
+
+</div>
+
+
+<div class="text-end">
+
+<span class="badge 
+{% if booking.status == 'Pending' %}bg-warning
+{% elif booking.status == 'Approved' %}bg-success
+{% elif booking.status == 'Rejected' %}bg-danger
+{% endif %}">
+
+{{ booking.status }}
+
+</span>
+
+
+<div class="mt-2">
+
+<a href="{% url 'agent_update_booking' booking.id 'Approved' %}"
+class="btn btn-success btn-sm">
+
+Approve
+
+</a>
+
+<a href="{% url 'agent_update_booking' booking.id 'Rejected' %}"
+class="btn btn-danger btn-sm">
+
+Reject
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<p class="text-light">No bookings yet.</p>
+
+{% endfor %}
 </section>
 
 {% endblock %}

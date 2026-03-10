@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="add-property-section py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-10">
+
+                <div class="add-property-card p-4 p-md-5">
+
+                    <h2 class="fw-bold mb-4 text-white">
+                        Edit Property
+                    </h2>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <!-- TITLE -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Title</label>
+                                <input type="text" name="title" value="{{ property.title }}" class="form-control"
+                                    required>
+                            </div>
+
+                            <!-- SLUG -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Slug</label>
+                                <input type="text" name="slug" value="{{ property.slug }}" class="form-control"
+                                    required>
+                            </div>
+
+                            <!-- DESCRIPTION -->
+                            <div class="col-12 mb-3">
+                                <label class="form-label text-white">Description</label>
+                                <textarea name="description" class="form-control"
+                                    rows="4">{{ property.description }}</textarea>
+                            </div>
+
+                            <!-- PRICE -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Price</label>
+                                <input type="number" name="price" value="{{ property.price }}" class="form-control">
+                            </div>
+
+                            <!-- LOCATION -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Location</label>
+                                <input type="text" name="location" value="{{ property.location }}" class="form-control">
+                            </div>
+
+                            <!-- CATEGORY -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Category</label>
+
+                                <select id="category-select" name="category" class="form-control" required>
+
+                                    <option value="" disabled selected>
+                                        Select Category
+                                    </option>
+
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">
+                                        {{ cat.name }}
+                                    </option>
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+                            <!-- LISTING TYPE -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Listing Type</label>
+
+                                <select name="listing_type" class="form-control">
+
+                                    <option value="Sale" {% if property.listing_type == "Sale" %}selected{% endif %}>
+                                        Sale
+                                    </option>
+
+                                    <option value="Rent" {% if property.listing_type == "Rent" %}selected{% endif %}>
+                                        Rent
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- BEDROOMS -->
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-white">Bedrooms</label>
+
+                                <input type="number" name="bedrooms" value="{{ property.bedrooms }}"
+                                    class="form-control">
+                            </div>
+
+                            <!-- BATHROOMS -->
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-white">Bathrooms</label>
+
+                                <input type="number" name="bathrooms" value="{{ property.bathrooms }}"
+                                    class="form-control">
+                            </div>
+
+                            <!-- AREA -->
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-white">Area (sqft)</label>
+
+                                <input type="number" name="area" value="{{ property.area }}" class="form-control">
+                            </div>
+
+                            <!-- SPECIFICATIONS -->
+
+                            <div class="col-12 mt-3">
+
+                                <h5 class="fw-bold text-white">
+                                    Specifications
+                                </h5>
+
+                                <div id="dynamic-spec-fields"></div>
+
+                            </div>
+
+
+                            <!-- FEATURED IMAGE -->
+
+                            <div class="col-12 mt-4 mb-4">
+
+                                <label class="form-label text-white">
+                                    Featured Image
+                                </label>
+
+                                {% if property.featured_image %}
+
+                                <div class="mb-3">
+                                    <img src="{{ property.featured_image.url }}"
+                                        style="max-height:200px;border-radius:8px;">
+                                </div>
+
+                                {% endif %}
+
+                                <input type="file" name="featured_image" class="form-control">
+
+                                <small class="text-white">
+                                    Leave empty if you don’t want to change the image
+                                </small>
+
+                            </div>
+
+
+                            <!-- ADD MORE IMAGES -->
+
+                            <div class="col-12 mb-4">
+
+                                <label class="form-label text-white">
+                                    Add More Images
+                                </label>
+
+                                <input type="file" name="gallery_images" class="form-control" multiple>
+
+                                <small class="text-white">
+                                    You can upload multiple images
+                                </small>
+
+                            </div>
+
+
+                            <!-- UPDATE BUTTON -->
+
+                            <div class="col-12">
+
+                                <button class="btn-add-property w-100">
+                                    Update Property
+                                </button>
+
+                            </div>
+
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

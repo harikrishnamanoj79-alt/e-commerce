@@ -17,6 +17,10 @@ from django.shortcuts import render
 from .models import Property, Category
 
 
+from num2words import num2words
+from django.db.models import Q
+import re
+
 def property_list(request):
 
     properties = Property.objects.filter(is_available=True)
@@ -25,31 +29,31 @@ def property_list(request):
     # -----------------------
     # 🔍 Keyword Search
     # -----------------------
+
     query = request.GET.get('q')
 
     if query:
 
         query_lower = query.lower()
 
-        # search in title & description
         properties = properties.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query)
         )
 
-        # 🔹 bedroom search (3bhk / 3 bedroom)
+        # bedroom search (3bhk / 3 bedroom)
         bedroom_match = re.search(r'(\d+)\s*(bhk|bedroom)', query_lower)
         if bedroom_match:
             bedrooms = int(bedroom_match.group(1))
             properties = properties.filter(bedrooms=bedrooms)
 
-        # 🔹 price search (under 20000000)
+        # price search (under 20000000)
         under_match = re.search(r'under\s*(\d+)', query_lower)
         if under_match:
             price = int(under_match.group(1))
             properties = properties.filter(price__lte=price)
 
-        # 🔹 location search (in kochi)
+        # location search
         if " in " in query_lower:
             location = query_lower.split(" in ")[1]
             properties = properties.filter(location__icontains=location)
@@ -82,6 +86,10 @@ def property_list(request):
     if max_price:
         properties = properties.filter(price__lte=max_price)
 
+    # 🔹 Convert price to words
+    for p in properties:
+        p.price_words = num2words(p.price, lang='en_IN').title()
+
     context = {
         'properties': properties,
         'categories': categories,
@@ -95,12 +103,19 @@ from .models import Property, PropertySpecification
 from bookings.models import VisitBooking
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from num2words import num2words
+
 def property_detail(request, slug):
 
     property = get_object_or_404(Property, slug=slug)
 
-    # 🔥 get property specifications
+    # property specifications
     specs = PropertySpecification.objects.filter(property=property).select_related('field')
+
+    # convert price to words
+    price_words = num2words(property.price, lang='en_IN').title()
 
     if request.method == 'POST':
 
@@ -124,11 +139,18 @@ def property_detail(request, slug):
 
     return render(request, 'property_detail.html', {
         'property': property,
-        'specs': specs
+        'specs': specs,
+        'price_words': price_words
     })
 
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils.text import slugify
+from django.utils import timezone
+from accounts.views import Profile
 
 @login_required
 def agent_add_property(request):
@@ -136,25 +158,47 @@ def agent_add_property(request):
     if not request.user.profile.is_agent:
         return redirect('home')
 
+    owner = None
+    phone = request.GET.get('phone')
+
+    # SEARCH OWNER
+    if phone:
+        owner = Profile.objects.filter(phone=phone).first()
+
     if request.method == "POST":
 
-        # 1️⃣ Create Property and store instance
+        owner_phone = request.POST.get('owner_phone')
+        owner_profile = Profile.objects.filter(phone=owner_phone).first()
+
+        if not owner_profile:
+            messages.error(request, "Owner not found")
+            return redirect('agent_add_property')
+
+        category_id = request.POST.get('category')
+        category = Category.objects.get(id=category_id)
+
+        # Auto slug
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+        cat_short = slugify(category.name)[:3]
+        auto_slug = f"{cat_short}-{timestamp}"
+
         property_instance = Property.objects.create(
+            owner=owner_profile.user,
             title=request.POST.get('title'),
-            slug=request.POST.get('slug'),
+            slug=auto_slug,
             description=request.POST.get('description'),
             price=request.POST.get('price'),
             location=request.POST.get('location'),
-            category_id=request.POST.get('category'),
+            category_id=category_id,
             listing_type=request.POST.get('listing_type'),
-            bedrooms=request.POST.get('bedrooms') or 0,
-            bathrooms=request.POST.get('bathrooms') or 0,
-            area=request.POST.get('area') or 0,
+            latitude=request.POST.get('latitude'),
+            longitude=request.POST.get('longitude'),
             featured_image=request.FILES.get('featured_image'),
-            agent=request.user
+            agent=request.user,
+            is_available=True
         )
 
-        # 2️⃣ Save dynamic specification values
+        # Save specifications
         for key, value in request.POST.items():
 
             if key.startswith("spec_"):
@@ -178,13 +222,23 @@ def agent_add_property(request):
 
                 spec.save()
 
+        # Save gallery
+        gallery_images = request.FILES.getlist('gallery_images')
+
+        for img in gallery_images:
+            PropertyImage.objects.create(
+                property=property_instance,
+                image=img
+            )
+
         messages.success(request, "Property added successfully!")
         return redirect('agent_dashboard')
 
     return render(request, 'agent_add_property.html', {
-        'categories': Category.objects.all()
+        'categories': Category.objects.all(),
+        'owner': owner,
+        'phone': phone
     })
-    
 
 
 
@@ -245,3 +299,125 @@ def search_suggestions(request):
             suggestions.append(c.name)
 
     return JsonResponse(suggestions, safe=False)
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def agent_edit_property(request, pk):
+
+    property = get_object_or_404(Property, id=pk, agent=request.user)
+
+    if not request.user.profile.is_agent:
+        return redirect('home')
+
+    if request.method == "POST":
+
+        property.title = request.POST.get('title')
+        property.slug = request.POST.get('slug')
+        property.description = request.POST.get('description')
+        property.price = request.POST.get('price')
+        property.location = request.POST.get('location')
+        property.category_id = request.POST.get('category')
+        property.listing_type = request.POST.get('listing_type')
+
+        # optional image change
+        if request.FILES.get('featured_image'):
+            property.featured_image = request.FILES.get('featured_image')
+
+        property.save()
+
+        # save specifications
+        for key, value in request.POST.items():
+
+            if key.startswith("spec_"):
+
+                field_id = key.split("_")[1]
+
+                spec_field = SpecificationField.objects.get(id=field_id)
+
+                spec, created = PropertySpecification.objects.get_or_create(
+                    property=property,
+                    field=spec_field
+                )
+
+                if spec_field.field_type == "text":
+                    spec.value_text = value
+
+                elif spec_field.field_type == "number":
+                    spec.value_number = value
+
+                elif spec_field.field_type == "boolean":
+                    spec.value_boolean = True if value == "on" else False
+
+                spec.save()
+
+        # add new gallery images
+        gallery_images = request.FILES.getlist('gallery_images')
+
+        for img in gallery_images:
+            PropertyImage.objects.create(
+                property=property,
+                image=img
+            )
+
+        messages.success(request, "Property updated successfully")
+        return redirect('agent_dashboard')
+
+    return render(request, "agent_edit_property.html", {
+        "property": property,
+        "categories": Category.objects.all()
+    })
+    
+
+@login_required
+def agent_property_detail(request, pk):
+
+    property = get_object_or_404(
+        Property,
+        id=pk,
+        agent=request.user
+    )
+
+    specs = PropertySpecification.objects.filter(property=property)
+
+    return render(request,
+        "agent_property_detail.html",
+        {
+            "property": property,
+            "specs": specs
+        }
+    )
+    
+    
+from django.shortcuts import get_object_or_404
+
+@login_required
+def agent_delete_property(request, pk):
+
+    property = get_object_or_404(
+        Property,
+        id=pk,
+        agent=request.user
+    )
+
+    property.delete()
+
+    messages.success(request, "Property deleted successfully")
+
+    return redirect("agent_properties")
+
+@login_required
+def agent_update_booking(request, booking_id, status):
+
+    booking = get_object_or_404(VisitBooking, id=booking_id)
+
+    if booking.property.agent != request.user:
+        return redirect("agent_dashboard")
+
+    booking.status = status
+    booking.save()
+
+    return redirect("agent_dashboard")

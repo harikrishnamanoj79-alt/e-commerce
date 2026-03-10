@@ -35,11 +35,19 @@
                 </a>
 
                 <a href="{% url 'admin_spec_fields' %}" class="admin-link">
-                    <i class="bi bi-sliders me-2"></i> Specification Fields
+                    <i class="bi bi-sliders"></i> Specification Fields
                 </a>
 
                 <a href="{% url 'admin_property_specs' %}" class="admin-link">
-                    <i class="bi bi-list-check me-2"></i> Property Specs
+                    <i class="bi bi-list-check"></i> Property Specs
+                </a>
+
+                <a href="{% url 'admin_users' %}" class="admin-link">
+                    <i class="bi bi-person"></i> Users
+                </a>
+
+                <a href="{% url 'admin_contact_messages' %}" class="admin-link">
+                    <i class="bi bi-envelope"></i> Contact Messages
                 </a>
 
                 <a href="/admin/" class="admin-link">
@@ -54,64 +62,91 @@
 
             <div class="container-fluid py-4">
 
-            <!-- MOBILE HEADER -->
-            
-            <div class="admin-mobile-header d-md-none">
-                <button onclick="toggleSidebar()" class="menu-toggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <h6 class="mb-0">Admin Dashboard</h6>
-            </div>
-
-            <div class="container-fluid py-4">
+                <div class="admin-mobile-header d-md-none">
+                    <button onclick="toggleSidebar()" class="menu-toggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h6 class="mb-0">Admin Dashboard</h6>
+                </div>
 
                 <h2 class="fw-bold mb-4">Categories</h2>
 
                 <!-- ADD CATEGORY -->
                 <div class="admin-card p-4 mb-4">
-                    <h3 class="fw-bold mb-4">Manage Categories</h3>
 
-                    <form method="POST" class="row g-3">
+                    <h5 class="fw-bold mb-3">Add Category</h5>
+
+                    <form method="POST" enctype="multipart/form-data" class="row g-3">
                         {% csrf_token %}
 
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <input type="text" name="name" placeholder="Category Name" class="form-control admin-input"
                                 required>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-5">
+                            <input type="file" name="image" class="form-control admin-input">
+                        </div>
+
+                        <div class="col-md-2">
                             <button class="btn btn-gold w-100">
                                 Add Category
                             </button>
                         </div>
+
                     </form>
+
                 </div>
 
                 <!-- CATEGORY TABLE -->
                 <div class="admin-card p-4">
+
                     <h5 class="fw-bold mb-4">Category List</h5>
 
                     <div class="table-responsive">
+
                         <table class="table admin-table align-middle">
+
                             <thead>
                                 <tr>
+                                    <th>Image</th>
                                     <th>Name</th>
                                 </tr>
                             </thead>
+
                             <tbody>
+
                                 {% for cat in categories %}
+
                                 <tr>
+
+                                    <td>
+                                        {% if cat.image %}
+                                        <img src="{{ cat.image.url }}"
+                                            style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+
                                     <td>{{ cat.name }}</td>
+
                                 </tr>
+
                                 {% empty %}
+
                                 <tr>
-                                    <td class="text-center text-muted">
+                                    <td colspan="2" class="text-center text-muted">
                                         No categories added yet.
                                     </td>
                                 </tr>
+
                                 {% endfor %}
+
                             </tbody>
+
                         </table>
+
                     </div>
 
                 </div>
@@ -125,11 +160,10 @@
 </section>
 
 <script>
-function toggleSidebar() {
-    document.getElementById("adminSidebar").classList.toggle("active");
-    document.getElementById("adminOverlay").classList.toggle("active");
-}
+    function toggleSidebar() {
+        document.getElementById("adminSidebar").classList.toggle("active");
+        document.getElementById("adminOverlay").classList.toggle("active");
+    }
 </script>
-
 
 {% endblock %}

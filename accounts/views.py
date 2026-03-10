@@ -171,16 +171,28 @@ from properties.models import Category, Property
 
 @login_required
 def admin_categories(request):
+
     if not request.user.is_superuser:
         return redirect('home')
 
     if request.method == "POST":
+
         name = request.POST.get('name')
-        Category.objects.create(name=name, slug=name.lower().replace(" ", "-"))
+        image = request.FILES.get('image')
+
+        Category.objects.create(
+            name=name,
+            slug=name.lower().replace(" ", "-"),
+            image=image
+        )
+
         return redirect('admin_categories')
 
     categories = Category.objects.all()
-    return render(request, 'categories.html', {'categories': categories})
+
+    return render(request, 'categories.html', {
+        'categories': categories
+    })
 
 
 from django.contrib.auth.models import User
@@ -356,10 +368,10 @@ def admin_add_property(request):
             location=request.POST.get('location'),
             category_id=request.POST.get('category'),
             listing_type=request.POST.get('listing_type'),
-            bedrooms=request.POST.get('bedrooms') or 0,
-            bathrooms=request.POST.get('bathrooms') or 0,
-            area=request.POST.get('area') or 0,
+            latitude=request.POST.get('latitude'),
+            longitude=request.POST.get('longitude'),
             featured_image=request.FILES.get('featured_image'),
+            is_featured = True if request.POST.get("is_featured") else False,
             is_available=True
         )
 
@@ -417,6 +429,17 @@ def admin_edit_property(request, pk):
     property_instance = get_object_or_404(Property, pk=pk)
     categories = Category.objects.all()
 
+    # get all spec fields of category
+    spec_fields = SpecificationField.objects.filter(
+        category=property_instance.category
+    )
+
+    # existing values
+    specs = PropertySpecification.objects.filter(property=property_instance)
+
+    # create dictionary {field_id : spec}
+    spec_dict = {s.field_id: s for s in specs}
+
     if request.method == "POST":
 
         property_instance.title = request.POST.get('title')
@@ -426,19 +449,19 @@ def admin_edit_property(request, pk):
         property_instance.location = request.POST.get('location')
         property_instance.category_id = request.POST.get('category')
         property_instance.listing_type = request.POST.get('listing_type')
-        property_instance.bedrooms = request.POST.get('bedrooms') or 0
-        property_instance.bathrooms = request.POST.get('bathrooms') or 0
-        property_instance.area = request.POST.get('area') or 0
+        property_instance.latitude = request.POST.get('latitude')
+        property_instance.longitude = request.POST.get('longitude')
+        property_instance.is_featured = bool(request.POST.get("is_featured"))
 
         if request.FILES.get('featured_image'):
             property_instance.featured_image = request.FILES.get('featured_image')
 
         property_instance.save()
 
-        # 🔥 Delete old specifications
+        # delete old specs
         PropertySpecification.objects.filter(property=property_instance).delete()
 
-        # 🔥 Save new specifications
+        # save specs
         for key, value in request.POST.items():
 
             if key.startswith("spec_"):
@@ -453,26 +476,23 @@ def admin_edit_property(request, pk):
 
                 if spec_field.field_type == "text":
                     spec.value_text = value
+
                 elif spec_field.field_type == "number":
-                    spec.value_number = value
+                    if value:
+                        spec.value_number = value
+
                 elif spec_field.field_type == "boolean":
                     spec.value_boolean = True if value == "on" else False
 
                 spec.save()
 
-        # 🔥 Save additional gallery images
-        gallery_images = request.FILES.getlist('gallery_images')
-        for img in gallery_images:
-            PropertyImage.objects.create(
-                property=property_instance,
-                image=img
-            )
-
         return redirect('admin_properties')
 
-    return render(request, 'edit_property.html', {
-        'property': property_instance,
-        'categories': categories
+    return render(request, "edit_property.html", {
+        "property": property_instance,
+        "categories": categories,
+        "spec_fields": spec_fields,
+        "spec_dict": spec_dict
     })
     
     
@@ -626,3 +646,83 @@ def admin_property_detail(request, pk):
         'property': property,
         'specs': specs
     })
+    
+@login_required
+def admin_delete_property_image(request, image_id):
+
+    if not request.user.is_superuser:
+        return redirect("home")
+
+    image = get_object_or_404(PropertyImage, id=image_id)
+
+    property_id = image.property.id
+
+    image.delete()
+
+    return redirect("admin_edit_property", pk=property_id)
+
+@login_required
+def admin_set_featured_image(request, image_id):
+
+    if not request.user.is_superuser:
+        return redirect("home")
+
+    image = get_object_or_404(PropertyImage, id=image_id)
+
+    property_obj = image.property
+
+    property_obj.featured_image = image.image
+    property_obj.save()
+
+    return redirect("admin_edit_property", pk=property_obj.id)
+
+
+from django.contrib.auth.models import User
+
+@login_required
+def admin_users(request):
+
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    users = User.objects.all()
+
+    return render(request, 'admin_users.html', {
+        'users': users
+    })
+from pages.models import *
+    
+@login_required
+def admin_contact_messages(request):
+
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    messages = ContactMessage.objects.all().order_by('-created_at')
+
+    return render(request, 'admin_contact_messages.html', {
+        'messages': messages
+    })
+    
+    
+    
+@login_required
+def change_user_role(request, user_id):
+
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    user = User.objects.get(id=user_id)
+
+    role = request.POST.get("role")
+
+    profile = user.profile
+
+    if role == "agent":
+        profile.is_agent = True
+    else:
+        profile.is_agent = False
+
+    profile.save()
+
+    return redirect('admin_users')

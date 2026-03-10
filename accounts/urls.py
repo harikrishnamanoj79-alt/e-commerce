@@ -21,6 +21,12 @@ urlpatterns = [
     path('admin-dashboard/edit-property/<int:pk>/', views.admin_edit_property, name='admin_edit_property'),
     path('admin-dashboard/delete-property/<int:pk>/',views.admin_delete_property,name='admin_delete_property'),
     path('profile/', views.profile_view, name='profile'),
-    path('admin-dashboard/property/<int:pk>/',views.admin_property_detail,name='admin_property_detail')
+    path('admin-dashboard/property/<int:pk>/',views.admin_property_detail,name='admin_property_detail'),
+    path("delete-property-image/<int:image_id>/",views.admin_delete_property_image,name="admin_delete_property_image"),
+    path("set-featured-image/<int:image_id>/",views.admin_set_featured_image,name="admin_set_featured_image"),
+    path('admin-dashboard/users/', views.admin_users, name='admin_users'),
+    path('admin-dashboard/contact-messages/', views.admin_contact_messages, name='admin_contact_messages'),
+    path('admin-dashboard/change-role/<int:user_id>/', views.change_user_role, name='change_user_role')
+    
     
 ]

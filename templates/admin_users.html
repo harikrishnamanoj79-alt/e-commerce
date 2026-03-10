@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="admin-wrapper">
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar" id="adminSidebar">
+
+            <div class="sidebar-header">
+                <h5>Admin Panel</h5>
+                <button class="sidebar-close d-md-none" onclick="toggleSidebar()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <nav class="admin-menu">
+                <a href="{% url 'admin_dashboard' %}" class="admin-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a href="{% url 'admin_categories' %}" class="admin-link">
+                    <i class="bi bi-tags"></i> Categories
+                </a>
+
+                <a href="{% url 'admin_properties' %}" class="admin-link">
+                    <i class="bi bi-building"></i> Properties
+                </a>
+
+                <a href="{% url 'admin_agents' %}" class="admin-link">
+                    <i class="bi bi-people"></i> Agents
+                </a>
+
+                <a href="{% url 'admin_spec_fields' %}" class="admin-link">
+                    <i class="bi bi-sliders me-2"></i> Specification Fields
+                </a>
+
+                <a href="{% url 'admin_property_specs' %}" class="admin-link">
+                    <i class="bi bi-list-check me-2"></i> Property Specs
+                </a>
+
+                <a href="{% url 'admin_users' %}" class="admin-link">
+                    <i class="bi bi-person"></i> Users
+                </a>
+
+                <a href="{% url 'admin_contact_messages' %}" class="admin-link">
+                    <i class="bi bi-envelope"></i> Contact Messages
+                </a>
+
+                <a href="/admin/" class="admin-link">
+                    <i class="bi bi-gear"></i> Django Admin
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-content">
+
+            <!-- MOBILE HEADER -->
+            <div class="admin-mobile-header d-md-none">
+                <button onclick="toggleSidebar()" class="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h6 class="mb-0">Admin Dashboard</h6>
+            </div>
+
+            <div class="container-fluid py-4">
+
+                <h2 class="fw-bold mb-4">Users</h2>
+
+                <div class="users-table-wrapper">
+
+                    <table class="table users-table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Change Role</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for user in users %}
+
+                            <tr>
+
+                                <!-- Username -->
+                                <td>
+                                    <strong>{{ user.username }}</strong>
+                                </td>
+
+                                <!-- Email -->
+                                <td>
+                                    {{ user.email }}
+                                </td>
+
+                                <!-- Role -->
+                                <td>
+
+                                    {% if user.profile.is_agent %}
+
+                                    <span class="role-agent">
+                                        Agent
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="role-user">
+                                        User
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- Change Role -->
+                                <td>
+
+                                    <form method="POST" action="{% url 'change_user_role' user.id %}" class="role-form">
+
+                                        {% csrf_token %}
+
+                                        <select name="role" class="role-select">
+
+                                            <option value="user" {% if not user.profile.is_agent %}selected{% endif %}>
+                                                User
+                                            </option>
+
+                                            <option value="agent" {% if user.profile.is_agent %}selected{% endif %}>
+                                                Agent
+                                            </option>
+
+                                        </select>
+
+                                        <button type="submit" class="btn-role-update">
+                                            Update
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    No users found
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="admin-card mt-5 p-4">
+                <h5 class="fw-bold mb-4">Quick Actions</h5>
+
+                <div class="row">
+                    <div class="col-md-3 col-6 mb-3">
+                        <a href="{% url 'admin_categories' %}" class="btn btn-gold w-100">
+                            Add Category
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 col-6 mb-3">
+                        <a href="{% url 'admin_properties' %}" class="btn btn-gold w-100">
+                            Manage Properties
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 col-6 mb-3">
+                        <a href="{% url 'admin_agents' %}" class="btn btn-gold w-100">
+                            Manage Agents
+                        </a>
+                    </div>
+
+
+                    <div class="col-md-3 col-6 mb-3">
+                        <a href="/admin/" class="btn btn-outline-light w-100">
+                            Django Admin
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+    </main>
+
+    </div>
+
+</section>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById("adminSidebar").classList.toggle("active");
+        document.getElementById("adminOverlay").classList.toggle("active");
+    }
+</script>
+
+{% endblock %}

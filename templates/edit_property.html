@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-
+{% load custom_tags %}            
+    
 <section class="admin-wrapper">
 
-    <!-- Overlay -->
     <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
 
     <div class="admin-layout">
 
         <!-- ================= SIDEBAR ================= -->
+
         <aside class="admin-sidebar" id="adminSidebar">
 
             <div class="sidebar-header">
                 <h5>Admin Panel</h5>
+
                 <button class="sidebar-close d-md-none" onclick="toggleSidebar()">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -44,6 +46,14 @@
                     <i class="bi bi-list-check"></i> Property Specs
                 </a>
 
+                <a href="{% url 'admin_users' %}" class="admin-link">
+                    <i class="bi bi-person"></i> Users
+                </a>
+
+                <a href="{% url 'admin_contact_messages' %}" class="admin-link">
+                    <i class="bi bi-envelope"></i> Contact Messages
+                </a>
+
                 <a href="/admin/" class="admin-link">
                     <i class="bi bi-gear"></i> Django Admin
                 </a>
@@ -52,16 +62,18 @@
 
         </aside>
 
+
         <!-- ================= MAIN CONTENT ================= -->
+
         <main class="admin-content">
 
-            <!-- MOBILE HEADER -->
             <div class="admin-mobile-header d-md-none">
                 <button onclick="toggleSidebar()" class="menu-toggle">
                     <i class="bi bi-list"></i>
                 </button>
                 <h6 class="mb-0">Edit Property</h6>
             </div>
+
 
             <div class="container-fluid py-4">
 
@@ -70,123 +82,330 @@
                 <div class="admin-card p-4">
 
                     <form method="POST" enctype="multipart/form-data">
+
                         {% csrf_token %}
 
                         <div class="row">
 
+                            <!-- TITLE -->
+
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-white">Title</label>
+
                                 <input type="text" name="title" value="{{ property.title }}" class="form-control"
                                     required>
+
                             </div>
+
+
+                            <!-- SLUG -->
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-white">Slug</label>
+
                                 <input type="text" name="slug" value="{{ property.slug }}" class="form-control"
                                     required>
+
                             </div>
+
+
+                            <!-- DESCRIPTION -->
 
                             <div class="col-12 mb-3">
                                 <label class="form-label text-white">Description</label>
+
                                 <textarea name="description" class="form-control"
                                     rows="4">{{ property.description }}</textarea>
+
                             </div>
+
+
+                            <!-- PRICE -->
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-white">Price</label>
+
                                 <input type="number" name="price" value="{{ property.price }}" class="form-control">
+
                             </div>
+
+
+                            <!-- LOCATION -->
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-white">Location</label>
+
                                 <input type="text" name="location" value="{{ property.location }}" class="form-control">
+
                             </div>
 
-                            <!-- Category -->
+
+                            <!-- CATEGORY -->
+
                             <div class="col-md-6 mb-3">
+
                                 <label class="form-label text-white">Category</label>
-                                <select name="category" class="form-control" required>
+
+                                <select id="category-select" name="category" class="form-control" required>
+
                                     <option value="">Select Category</option>
+
                                     {% for cat in categories %}
-                                        <option value="{{ cat.id }}" {% if property.category_id == cat.id %} selected {% endif %}>
-                                            {{ cat.name }}
-                                        </option>
+
+                                    <option value="{{ cat.id }}" {% if property.category_id == cat.id %}selected{% endif %}>
+                                        {{ cat.name }}
+                                    </option>
+
                                     {% endfor %}
+
                                 </select>
+
+                            </div>
+
+
+                            <!-- LISTING TYPE -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label text-white">Listing Type</label>
+
+                                <select name="listing_type" class="form-control">
+
+                                    <option value="Sale" {% if property.listing_type == "Sale" %}selected{% endif %}>
+                                        Sale
+                                    </option>
+
+                                    <option value="Rent" {% if property.listing_type == "Rent" %}selected{% endif %}>
+                                        Rent
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- Specifications -->
+
+<!-- Specifications -->
+
+<div class="col-12 mt-3">
+
+<h5 class="text-white">Specifications</h5>
+
+{% for field in spec_fields %}
+
+{% with spec=spec_dict|get_item:field.id %}
+
+<div class="mb-3">
+
+<label class="form-label text-white">
+{{ field.name }}
+</label>
+
+{% if field.field_type == "text" %}
+
+<input type="text"
+name="spec_{{ field.id }}"
+class="form-control"
+value="{{ spec.value_text|default:'' }}">
+
+{% elif field.field_type == "number" %}
+
+<input type="number"
+name="spec_{{ field.id }}"
+class="form-control"
+value="{{ spec.value_number|default:'' }}">
+
+{% elif field.field_type == "boolean" %}
+
+<input type="checkbox"
+name="spec_{{ field.id }}"
+{% if spec.value_boolean %}checked{% endif %}>
+
+{% endif %}
+
+</div>
+
+{% endwith %}
+
+{% endfor %}
+
+</div>
+
+
+
+                            <!-- FEATURED IMAGE -->
+
+                            <div class="col-12 mt-3 mb-4">
+
+                                <label class="form-label text-white">Featured Image</label>
+
+                                {% if property.featured_image %}
+
+                                <div class="mb-3">
+                                    <img src="{{ property.featured_image.url }}"
+                                        style="max-height:200px;border-radius:8px;">
                                 </div>
+
+                                {% endif %}
+
+                                <input type="file" name="featured_image" class="form-control">
+
+                                <small class="text-white">
+                                    Leave empty if you don’t want to change the image.
+                                </small>
+
                             </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Listing Type</label>
-                            <select name="listing_type" class="form-control" required>
-                                <option value="Sale" {% if property.listing_type == "Sale" %} selected {% endif %}>
-                                    Sale
-                                </option>
-                                <option value="Rent" {% if property.listing_type == "Rent" %} selected {% endif %}>
-                                    Rent
-                                </option>
-                            </select>
-                        </div>
+                            <!-- Existing Gallery Images -->
+
+<div class="col-12 mt-3 mb-4">
+
+<label class="form-label text-white">
+Existing Gallery Images
+</label>
+
+<div class="row">
+
+{% for img in property.images.all %}
+
+<div class="col-md-3 mb-3">
+
+<div class="position-relative">
+
+<img src="{{ img.image.url }}"
+class="img-fluid rounded"
+style="height:150px;object-fit:cover;width:100%;">
+
+<!-- Delete Button -->
+
+<a href="{% url 'admin_delete_property_image' img.id %}"
+class="btn btn-danger btn-sm position-absolute top-0 end-0"
+onclick="return confirm('Delete this image?')">
+
+<i class="bi bi-trash"></i>
+
+</a>
+
+<!-- Set Featured -->
+
+<a href="{% url 'admin_set_featured_image' img.id %}"
+class="btn btn-warning btn-sm position-absolute bottom-0 end-0">
+
+<i class="bi bi-star"></i>
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
 
 
-                        <!-- Specs -->
-                        <div class="col-12 mt-3">
-                            <h5 class="text-white">Specifications</h5>
-                            <div id="dynamic-spec-fields"></div>
-                        </div>
 
-                        <!-- Featured Image -->
-                        <div class="col-12 mt-3 mb-4">
-                            <label class="form-label text-white">Featured Image</label>
+                            <!-- ADD MORE IMAGES -->
 
-                            <!-- Show current image -->
-                            {% if property.featured_image %}
-                            <div class="mb-3">
-                                <img src="{{ property.featured_image.url }}" alt="Current Image"
-                                    style="max-height:200px; border-radius:8px;">
+                            <div class="col-12 mb-4">
+
+                                <label class="form-label text-white">Add More Images</label>
+
+                                <input type="file" name="gallery_images" class="form-control" multiple>
+
+                                <small class="text-white">
+                                    You can upload multiple additional images
+                                </small>
+
                             </div>
-                            {% endif %}
 
-                            <!-- Optional new upload -->
-                            <input type="file" name="featured_image" class="form-control">
-                            <small class="form-label text-white">
-                                Leave empty if you don’t want to change the image.
-                            </small>
+                            <!-- Featured Property -->
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label text-white">
+Featured Property
+</label>
+
+<div class="form-check">
+
+<input class="form-check-input"
+       type="checkbox"
+       name="is_featured"
+       value="1"
+       {% if property.is_featured %}checked{% endif %}>
+
+<label class="form-check-label text-white">
+Mark as Featured
+</label>
+
+</div>
+
+</div>
+
+
+
+                            <!-- SUBMIT -->
+
+                            <div class="col-12 mt-2">
+
+                                <button class="btn-add-property w-100">
+                                    Update Property
+                                </button>
+
+                            </div>
+
+
                         </div>
 
-                        <!-- Add More Images -->
-                        <div class="col-12 mt-3 mb-4">
-                            <label class="form-label text-white">Add More Images</label>
-                            <input type="file" name="gallery_images" class="form-control" multiple>
-                            <small class="form-label text-white">
-                                You can upload multiple additional images
-                            </small>
-                        </div>
-
-                        <div class="col-12 mt-2">
-                            <button class="btn-add-property w-100">
-                                Update Property
-                            </button>
-                        </div>
+                    </form>
 
                 </div>
-                </form>
 
             </div>
 
-    </div>
-
-    </main>
+        </main>
 
     </div>
 
 </section>
 
+
+
 <script>
+
     function toggleSidebar() {
         document.getElementById("adminSidebar").classList.toggle("active");
         document.getElementById("adminOverlay").classList.toggle("active");
     }
+
+
+    /* Dynamic specification loading */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const categorySelect = document.getElementById("category-select");
+
+        categorySelect.addEventListener("change", function () {
+
+            let categoryId = this.value;
+
+            fetch(`/get-spec-fields/${categoryId}/`)
+                .then(res => res.json())
+                .then(data => {
+
+                    document.getElementById("dynamic-spec-fields").innerHTML = data.html;
+
+                });
+
+        });
+
+    });
+
 </script>
 
 {% endblock %}

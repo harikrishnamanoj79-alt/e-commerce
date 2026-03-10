@@ -129,9 +129,10 @@ footer a:hover {
 
 .hero-section{
     height:85vh;
-    background:url("../images/hero.png") center/cover no-repeat;
+    background:url("../images/ChatGPT\ Image\ Mar\ 9\,\ 2026\,\ 03_15_53\ PM.png") top/cover no-repeat;
     position:relative;
 }
+
 
 /* Dark overlay */
 .hero-section::before{
@@ -152,6 +153,7 @@ footer a:hover {
 /* ================= HERO TEXT ================= */
 
 .hero-title{
+    padding-top: 230px;
     font-size:52px;
     font-weight:700;
     letter-spacing:0.5px;
@@ -2179,4 +2181,267 @@ font-size:14px;
 
 .btn-view:hover{
 background:#0b5ed7;
+}
+
+
+
+/* ===== PAGE BACKGROUND ===== */
+
+.add-property-section{
+    background: #1f3447;
+    min-height: 100vh;
+}
+
+
+/* ===== CARD CONTAINER ===== */
+
+.add-property-card{
+    background: #2b4257;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+
+/* ===== INPUTS ===== */
+
+.add-property-card input,
+.add-property-card textarea,
+.add-property-card select{
+    background: #e9e9e9;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+
+.add-property-card input:focus,
+.add-property-card textarea:focus,
+.add-property-card select:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+
+/* ===== SECTION TITLES ===== */
+
+.add-property-card h2{
+    color: #fff;
+    font-weight: 700;
+}
+
+.add-property-card h5{
+    color: #fff;
+}
+
+
+/* ===== OWNER RESULT BOX ===== */
+
+.owner-result{
+    background: #f1f1f1;
+    border-radius: 8px;
+    border: 2px solid #49b37d;
+    padding: 15px;
+}
+
+.owner-result strong{
+    color: #2c7a54;
+}
+
+
+/* ===== BUTTONS ===== */
+
+.btn-search-owner{
+    background: #f2b632;
+    border: none;
+    color: #000;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.btn-search-owner:hover{
+    background: #e5a81e;
+}
+
+
+.btn-add-owner{
+    background: #2f7efc;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.btn-add-owner:hover{
+    background: #1e66d6;
+}
+
+
+.btn-add-property{
+    background: #2f7efc;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.btn-add-property:hover{
+    background: #1e66d6;
+}
+
+
+
+/* Logo container */
+.logo-container{
+    display:flex;
+    align-items:center;
+}
+
+/* Logo image */
+.navbar-logo{
+    height:65px;
+    transition:all 0.4s ease;
+    animation:logoFloat 4s ease-in-out infinite;
+}
+
+/* Hover effect */
+.navbar-logo:hover{
+    transform:scale(1.15) rotate(-5deg);
+    filter:drop-shadow(0 8px 15px rgba(0,0,0,0.3));
+}
+
+/* Floating animation */
+@keyframes logoFloat{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-6px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+.navbar-logo{
+    height:65px;
+    animation:logoFloat 4s ease-in-out infinite, logoGlow 3s infinite alternate;
+    
+}
+
+@keyframes logoGlow{
+    from{
+        filter:drop-shadow(0 0 5px rgba(255,215,0,0.4));
+    }
+    to{
+        filter:drop-shadow(0 0 15px rgba(255,215,0,0.8));
+    }
+}
+
+
+/* ===== USERS PAGE ===== */
+
+.users-table-wrapper{
+    background:#ffffff;
+    border-radius:16px;
+    padding:10px 0;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Table */
+
+.users-table{
+    margin-bottom:0;
+}
+
+.users-table thead{
+    background:#f4f4f4;
+}
+
+.users-table th{
+    font-weight:600;
+    padding:16px;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.users-table td{
+    padding:14px 16px;
+    vertical-align:middle;
+    border-bottom:1px solid #f0f0f0;
+}
+
+/* Row hover */
+
+.users-table tbody tr:hover{
+    background:#fafafa;
+}
+
+/* Role badges */
+
+.role-agent{
+    background:#f8c146;
+    color:#1f2d3d;
+    padding:5px 12px;
+    border-radius:6px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.role-user{
+    background:#e5e7eb;
+    color:#333;
+    padding:5px 12px;
+    border-radius:6px;
+    font-size:13px;
+}
+
+/* Role form */
+
+.role-form{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+/* Select */
+
+.role-select{
+    border-radius:8px;
+    height:36px;
+    border:1px solid #ddd;
+    padding:4px 10px;
+    min-width:110px;
+}
+
+/* Update button */
+
+.btn-role-update{
+    background:#1f2d3d;
+    color:#ffffff;
+    border:none;
+    border-radius:8px;
+    padding:6px 14px;
+    font-size:13px;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.btn-role-update:hover{
+    background:#f8c146;
+    color:#1f2d3d;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.users-table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+}
+
 }

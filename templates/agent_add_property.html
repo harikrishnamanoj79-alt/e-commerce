@@ -1,117 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 <section class="add-property-section py-5">
+
     <div class="container">
 
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+
+            <div class="col-lg-10">
 
                 <div class="add-property-card p-4 p-md-5">
 
-                    <h2 class="fw-bold mb-4 text-center">
-                        Add New Property
+                    <h2 class="fw-bold mb-4">
+                        Add Property owner
                     </h2>
 
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
 
-                        <div class="row">
+                    <!-- OWNER SEARCH -->
+                    <form method="GET">
 
-                            <div class="col-md-6 mb-3">
-                                <input type="text"
-                                       name="title"
-                                       class="form-control custom-input"
-                                       placeholder="Property Title"
-                                       required>
-                            </div>
+                        <div class="row align-items-end">
 
                             <div class="col-md-6 mb-3">
-                                <input type="text"
-                                       name="slug"
-                                       class="form-control custom-input"
-                                       placeholder="Slug (unique URL)"
-                                       required>
+                                <input type="text" name="phone" class="form-control custom-input"
+                                    placeholder="Owner Mobile Number" value="{{ phone }}">
                             </div>
 
-                            <div class="col-12 mb-3">
-                                <textarea name="description"
-                                          class="form-control custom-input"
-                                          rows="4"
-                                          placeholder="Property Description"
-                                          required></textarea>
+                            <div class="col-md-3 mb-3">
+                                <button type="submit" class="btn-search-owner w-100">
+                                    Search Owner
+                                </button>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <input type="number"
-                                       name="price"
-                                       class="form-control custom-input"
-                                       placeholder="Price"
-                                       required>
-                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button type="button" class="btn-add-owner w-100" data-bs-toggle="modal"
+                                    data-bs-target="#ownerModal">
 
-                            <div class="col-md-6 mb-3">
-                                <input type="text"
-                                       name="location"
-                                       class="form-control custom-input"
-                                       placeholder="Location"
-                                       required>
-                            </div>
+                                    Add Owner
 
-                            <div class="col-md-6 mb-3">
-                                <select name="category"
-                                        class="form-control custom-input"
-                                        required>
-                                    <option value="">Select Category</option>
-                                    {% for cat in categories %}
-                                        <option value="{{ cat.id }}">{{ cat.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="col-12" id="dynamic-spec-fields"></div>
-
-                            <div class="col-md-6 mb-3">
-                                <select name="listing_type"
-                                        class="form-control custom-input"
-                                        required>
-                                    <option value="Sale">Sale</option>
-                                    <option value="Rent">Rent</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <input type="number"
-                                       name="bedrooms"
-                                       class="form-control custom-input"
-                                       placeholder="Bedrooms">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <input type="number"
-                                       name="bathrooms"
-                                       class="form-control custom-input"
-                                       placeholder="Bathrooms">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <input type="number"
-                                       name="area"
-                                       class="form-control custom-input"
-                                       placeholder="Area (sqft)">
-                            </div>
-
-                            <div class="col-12 mb-4">
-                                <input type="file"
-                                       name="featured_image"
-                                       class="form-control custom-input"
-                                       required>
-                            </div>
-
-                            <div class="col-12">
-                                <button type="submit"
-                                        class="btn btn-gold w-100">
-                                    Add Property
                                 </button>
                             </div>
 
@@ -119,13 +49,246 @@
 
                     </form>
 
+
+
+                    <!-- OWNER RESULT -->
+
+                    {% if owner %}
+
+                    <div class="card mt-3 border-success">
+                        <div class="card-body">
+
+                            <h6 class="fw-bold text-success">Owner Found</h6>
+
+                            <p class="mb-1">
+                                <strong>Name:</strong> {{ owner.user.username }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Phone:</strong> {{ owner.phone }}
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Email:</strong> {{ owner.user.email }}
+                            </p>
+
+                        </div>
+                    </div>
+
+
+                    {% elif phone %}
+
+                    <div class="alert alert-danger mt-3">
+                        Owner not found
+                    </div>
+
+                    {% endif %}
+
+
                 </div>
 
+
+
+                <!-- PROPERTY FORM -->
+
+                {% if owner %}
+
+                <div class="add-property-card p-4 mt-4">
+
+                    <h2 class="fw-bold mb-4">
+                        Add Property
+                    </h2>
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="owner_phone" value="{{ owner.phone }}">
+
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="title" class="form-control" placeholder="Property Title"
+                                    required>
+                            </div>
+
+
+                            <div class="col-12 mb-3">
+                                <textarea name="description" class="form-control" rows="4" placeholder="Description"
+                                    required></textarea>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <input type="number" name="price" class="form-control" placeholder="Price" required>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <input type="text" name="location" class="form-control" placeholder="Location" required>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <select id="category-select" name="category" class="form-control" required>
+
+                                    <option value="" disabled selected>
+                                        Select Category
+                                    </option>
+
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">
+                                        {{ cat.name }}
+                                    </option>
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <select name="listing_type" class="form-control" required>
+
+                                    <option value="Sale">Sale</option>
+                                    <option value="Rent">Rent</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Latitude</label>
+                                <input type="text" name="latitude" class="form-control" placeholder="Latitude">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Longitude</label>
+                                <input type="text" name="longitude" class="form-control" placeholder="Longitude">
+                            </div>
+
+
+
+                            <!-- SPECIFICATIONS -->
+
+                            <div class="col-12 mt-3">
+
+                                <h5 class="fw-bold text-white">
+                                    Specifications
+                                </h5>
+
+                                <div id="dynamic-spec-fields"></div>
+
+                            </div>
+
+
+
+                            <!-- FEATURED IMAGE -->
+
+                            <div class="col-12 mt-3 mb-4">
+
+                                <label class="form-label text-white">
+                                    Featured Image
+                                </label>
+
+                                <input type="file" name="featured_image" class="form-control" required>
+
+                            </div>
+
+
+
+                            <!-- GALLERY IMAGES -->
+
+                            <div class="col-12 mb-4">
+
+                                <label class="form-label text-white">
+                                    Gallery Images
+                                </label>
+
+                                <input type="file" name="gallery_images" class="form-control" multiple>
+
+                                <small class="text-white">
+                                    You can upload multiple images
+                                </small>
+
+                            </div>
+
+
+
+                            <div class="col-12">
+
+                                <button class="btn-add-property w-100">
+                                    Add Property
+                                </button>
+
+                            </div>
+
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                {% endif %}
+
             </div>
+
         </div>
 
     </div>
+
 </section>
 
-{% endblock %}
 
+
+<!-- OWNER MODAL -->
+
+<div class="modal fade" id="ownerModal" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Property Owner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                {% include "register_box.html" %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    document.getElementById("category-select").addEventListener("change", function () {
+
+        let categoryId = this.value;
+
+        fetch(`/get-spec-fields/${categoryId}/`)
+            .then(res => res.json())
+            .then(data => {
+
+                document.getElementById("dynamic-spec-fields").innerHTML = data.html;
+
+            });
+
+    });
+
+</script>
+
+{% endblock %}

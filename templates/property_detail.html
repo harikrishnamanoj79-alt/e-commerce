@@ -2,6 +2,14 @@
 {% load static %}
 {% block content %}
 
+{% block title %}
+{{ property.title }} | FLON Real Estate
+{% endblock %}
+
+{% block description %}
+{{ property.title }} located in {{ property.location }} available for {{ property.listing_type }} at ₹{{ property.price }}.
+{% endblock %}
+
 <div class="container py-5">
 
     <!-- PROPERTY TITLE -->
@@ -56,27 +64,12 @@
                         ₹ {{ property.price }}
                     </h3>
 
-                </div>
-
-                <!-- PROPERTY STATS -->
-                <div class="row text-center mb-4">
-
-                    <div class="col-4">
-                        <strong>{{ property.bedrooms }}</strong><br>
-                        <small>Beds</small>
-                    </div>
-
-                    <div class="col-4">
-                        <strong>{{ property.bathrooms }}</strong><br>
-                        <small>Baths</small>
-                    </div>
-
-                    <div class="col-4">
-                        <strong>{{ property.area }}</strong><br>
-                        <small>Sqft</small>
-                    </div>
+                    <p class="fw-bold mb-0">
+                        ({{ price_words }} Rupees)
+                    </p>
 
                 </div>
+
 
                 <hr>
 

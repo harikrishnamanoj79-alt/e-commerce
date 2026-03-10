@@ -12,7 +12,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)  # ✅ UNIQUE
+    phone = models.CharField(max_length=20, unique=True)   # ✅ UNIQUE
     address = models.TextField()
 
     is_agent = models.BooleanField(default=False)

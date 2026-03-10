@@ -15,24 +15,28 @@
 
                         <div class="list-group list-group-flush">
 
-                            <a href="{% url 'admin_dashboard' %}"
-                               class="list-group-item list-group-item-action">
+                            <a href="{% url 'admin_dashboard' %}" class="list-group-item list-group-item-action">
                                 Dashboard
                             </a>
 
-                            <a href="{% url 'admin_categories' %}"
-                               class="list-group-item list-group-item-action">
+                            <a href="{% url 'admin_categories' %}" class="list-group-item list-group-item-action">
                                 Categories
                             </a>
 
-                            <a href="{% url 'admin_properties' %}"
-                               class="list-group-item list-group-item-action">
+                            <a href="{% url 'admin_properties' %}" class="list-group-item list-group-item-action">
                                 Properties
                             </a>
 
-                            <a href="{% url 'admin_agents' %}"
-                               class="list-group-item list-group-item-action">
+                            <a href="{% url 'admin_agents' %}" class="list-group-item list-group-item-action">
                                 Agents
+                            </a>
+
+                            <a href="{% url 'admin_users' %}" class="admin-link">
+                                <i class="bi bi-person"></i> Users
+                            </a>
+
+                            <a href="{% url 'admin_contact_messages' %}" class="admin-link">
+                                <i class="bi bi-envelope"></i> Contact Messages
                             </a>
 
                         </div>
