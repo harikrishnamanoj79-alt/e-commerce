@@ -75,9 +75,9 @@ class Property(models.Model):
 
     listing_type = models.CharField(max_length=20, choices=LISTING_TYPE)
 
-    bedrooms = models.IntegerField(default=0)
-    bathrooms = models.IntegerField(default=0)
-    area = models.IntegerField(help_text="Area in sqft")
+    bedrooms = models.IntegerField(null=True, blank=True, default=0)
+    bathrooms = models.IntegerField(null=True, blank=True, default=0)
+    area = models.IntegerField(null=True, blank=True, default=0)
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
