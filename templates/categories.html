@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<!-- SPINNER OVERLAY -->
+<div id="globalSpinner" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; flex-direction:column; gap:14px;">
+    <div style="width:56px;height:56px;border:6px solid rgba(248,193,70,0.3);border-top-color:#f8c146;border-radius:50%;animation:spin 0.9s linear infinite;"></div>
+    <p style="color:#f8c146;font-weight:600;font-size:15px;margin:0;">Adding category…</p>
+</div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+
 <section class="admin-wrapper">
 
     <div class="admin-overlay" id="adminOverlay" onclick="toggleSidebar()"></div>
@@ -89,8 +97,11 @@
                         </div>
 
                         <div class="col-md-2">
-                            <button class="btn btn-gold w-100">
-                                Add Category
+                            <button class="btn btn-gold w-100" type="submit" id="addCatBtn" onclick="showCatSpinner()">
+                                <span id="addCatBtnText">Add Category</span>
+                                <span id="addCatBtnSpinner" style="display:none;">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status"></span> Adding…
+                                </span>
                             </button>
                         </div>
 
@@ -164,6 +175,16 @@
         document.getElementById("adminSidebar").classList.toggle("active");
         document.getElementById("adminOverlay").classList.toggle("active");
     }
+</script>
+
+
+<script>
+function showCatSpinner() {
+    document.getElementById('addCatBtnText').style.display = 'none';
+    document.getElementById('addCatBtnSpinner').style.display = 'inline-flex';
+    document.getElementById('addCatBtn').disabled = true;
+    document.getElementById('globalSpinner').style.display = 'flex';
+}
 </script>
 
 {% endblock %}

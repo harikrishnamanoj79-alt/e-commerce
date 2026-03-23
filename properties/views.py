@@ -187,11 +187,29 @@ def agent_add_property(request):
         return redirect('home')
 
     owner = None
-    phone = request.GET.get('phone')
+    owner_results = []
+    phone = request.GET.get('phone', '').strip()
+    owner_name = request.GET.get('owner_name', '').strip()
 
-    # SEARCH OWNER
+    # SEARCH OWNER by phone
     if phone:
         owner = Profile.objects.filter(phone=phone).first()
+
+    # SEARCH OWNER by name
+    if owner_name:
+        owner_results = Profile.objects.filter(
+            user__username__icontains=owner_name
+        ).select_related('user')
+        if owner_results.count() == 1:
+            owner = owner_results.first()
+
+    # Select owner by id from list
+    owner_id = request.GET.get('owner_id')
+    if owner_id:
+        try:
+            owner = Profile.objects.select_related('user').get(id=owner_id)
+        except Profile.DoesNotExist:
+            owner = None
 
     if request.method == "POST":
 
@@ -265,7 +283,9 @@ def agent_add_property(request):
     return render(request, 'agent_add_property.html', {
         'categories': Category.objects.all(),
         'owner': owner,
-        'phone': phone
+        'owner_results': owner_results,
+        'phone': phone,
+        'owner_name': owner_name,
     })
 
 
@@ -303,28 +323,37 @@ from .models import Property, Category
 
 def search_suggestions(request):
 
-    query = request.GET.get("q", "")
-
+    query = request.GET.get("q", "").strip()
     suggestions = []
 
     if query:
-
-        # Property titles
+        # Property titles and locations
         properties = Property.objects.filter(
             Q(title__icontains=query) |
-            Q(location__icontains=query)
-        )[:5]
+            Q(location__icontains=query),
+            is_available=True
+        ).distinct()[:6]
 
         for p in properties:
-            suggestions.append(p.title)
+            suggestions.append({'title': p.title, 'type': 'Property'})
+
+        # Unique locations
+        locations = Property.objects.filter(
+            location__icontains=query,
+            is_available=True
+        ).values_list('location', flat=True).distinct()[:3]
+
+        seen_titles = {s['title'] for s in suggestions}
+        for loc in locations:
+            if loc not in seen_titles:
+                suggestions.append({'title': loc, 'type': 'Location'})
+                seen_titles.add(loc)
 
         # Categories
-        categories = Category.objects.filter(
-            name__icontains=query
-        )[:3]
-
+        categories = Category.objects.filter(name__icontains=query)[:3]
         for c in categories:
-            suggestions.append(c.name)
+            if c.name not in seen_titles:
+                suggestions.append({'title': c.name, 'type': 'Category'})
 
     return JsonResponse(suggestions, safe=False)
 

@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "qir_bs%$%hf!*8vr+&a(!0gup4$r%!p*cdhp3n^o$c!lp8zqq")
 
-DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG =  "True"
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com","flon.in","www.flon.in",]
 
@@ -155,3 +155,5 @@ cloudinary.config(
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SECURE_BROWSER_XSS_FILTER = False
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -327,11 +327,32 @@ def admin_add_property(request):
         return redirect('home')
 
     owner = None
-    phone = request.GET.get('phone')
+    owner_results = []
+    phone = request.GET.get('phone', '').strip()
+    owner_name = request.GET.get('owner_name', '').strip()
 
-    # 🔎 Search owner using phone
+    # 🔎 Search owner by phone
     if phone:
         owner = Profile.objects.filter(phone=phone).first()
+
+    # 🔎 Search owner by name (returns list)
+    if owner_name:
+        owner_results = Profile.objects.filter(
+            user__username__icontains=owner_name
+        ).select_related('user')
+        if owner_results.count() == 1:
+            owner = owner_results.first()
+
+    # Pre-select owner by id (from name search result click)
+    owner_id = request.GET.get('owner_id')
+    if owner_id:
+        try:
+            owner = Profile.objects.select_related('user').get(id=owner_id)
+        except Profile.DoesNotExist:
+            owner = None
+
+    # Agents list for assignment dropdown
+    agents = Profile.objects.filter(is_agent=True).select_related('user')
 
     if request.method == "POST":
 
@@ -341,6 +362,7 @@ def admin_add_property(request):
         if not owner_profile:
             return render(request, 'add_property.html', {
                 'categories': Category.objects.all(),
+                'agents': agents,
                 'owner': None,
                 'phone': phone,
                 'error': "Owner not found. Please add owner first."
@@ -355,12 +377,22 @@ def admin_add_property(request):
 
         timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
 
-        cat_short = slugify(category.name)[:3]   # first 3 letters
+        cat_short = slugify(category.name)[:3]
         auto_slug = f"{cat_short}-{timestamp}"
-        
+
+        # Resolve assigned agent
+        agent_id = request.POST.get('agent_id')
+        assigned_agent = None
+        if agent_id:
+            try:
+                assigned_agent = User.objects.get(id=agent_id)
+            except User.DoesNotExist:
+                pass
+
         # 🔥 Create property
         property_instance = Property.objects.create(
             owner=owner_profile.user,
+            agent=assigned_agent,
             title=request.POST.get('title'),
             slug=auto_slug,
             description=request.POST.get('description'),
@@ -371,7 +403,7 @@ def admin_add_property(request):
             latitude=request.POST.get('latitude'),
             longitude=request.POST.get('longitude'),
             featured_image=request.FILES.get('featured_image'),
-            is_featured = True if request.POST.get("is_featured") else False,
+            is_featured=True if request.POST.get("is_featured") else False,
             is_available=True
         )
 
@@ -412,8 +444,11 @@ def admin_add_property(request):
 
     return render(request, 'add_property.html', {
         'categories': Category.objects.all(),
+        'agents': agents,
         'owner': owner,
-        'phone': phone
+        'owner_results': owner_results,
+        'phone': phone,
+        'owner_name': owner_name,
     })
     
 from django.shortcuts import get_object_or_404

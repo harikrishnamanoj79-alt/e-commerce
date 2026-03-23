@@ -1,66 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+<!-- SPINNER OVERLAY -->
+<div id="globalSpinner" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; flex-direction:column; gap:14px;">
+    <div style="width:56px;height:56px;border:6px solid rgba(248,193,70,0.3);border-top-color:#f8c146;border-radius:50%;animation:spin 0.9s linear infinite;"></div>
+    <p style="color:#f8c146;font-weight:600;font-size:15px;margin:0;">Creating agent…</p>
+</div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
 <section class="admin-wrapper py-5">
-
     <div class="container">
-
         <div class="row justify-content-center">
-
             <div class="col-lg-6">
-
                 <div class="admin-card p-4">
-
                     <h3 class="fw-bold mb-4 text-center">Add Agent</h3>
 
-                    <form method="POST">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
 
+                    <form method="POST" id="addAgentForm">
                         {% csrf_token %}
 
-                        <!-- Username -->
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control admin-input"
-                                placeholder="Enter username" required>
+                            <input type="text" name="username" class="form-control admin-input" placeholder="Enter username" required>
                         </div>
 
-                        <!-- Email -->
                         <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input type="email" name="email" class="form-control admin-input" placeholder="Enter email">
                         </div>
 
-                        <!-- Password -->
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control admin-input"
-                                placeholder="Enter password" required>
+                            <input type="password" name="password" class="form-control admin-input" placeholder="Enter password" required>
                         </div>
 
-                        <!-- Phone -->
                         <div class="mb-4">
                             <label class="form-label">Phone</label>
-                            <input type="text" name="phone" class="form-control admin-input"
-                                placeholder="Enter phone number">
+                            <input type="text" name="phone" class="form-control admin-input" placeholder="Enter phone number">
                         </div>
 
-                        <!-- Submit -->
-                        <button class="btn-gold w-100">
-                            Create Agent
+                        <button class="btn-gold w-100" type="submit" id="createAgentBtn">
+                            <span id="agentBtnText"><i class="bi bi-person-plus me-1"></i> Create Agent</span>
+                            <span id="agentBtnSpinner" style="display:none;">
+                                <span class="spinner-border spinner-border-sm me-2" role="status"></span> Creating…
+                            </span>
                         </button>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
+
+<script>
+document.getElementById('addAgentForm').addEventListener('submit', function () {
+    document.getElementById('agentBtnText').style.display = 'none';
+    document.getElementById('agentBtnSpinner').style.display = 'inline-flex';
+    document.getElementById('createAgentBtn').disabled = true;
+    document.getElementById('globalSpinner').style.display = 'flex';
+});
+</script>
 
 {% endblock %}

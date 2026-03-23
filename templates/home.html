@@ -2,223 +2,365 @@
 {% load static %}
 {% block content %}
 
-<!-- HERO SECTION -->
-<section class="hero-section d-flex align-items-center text-center text-white">
-    <div class="container">
-        <h1 class="hero-title">Find Your Dream Properties</h1>
-        <p class="hero-subtitle">Luxury Villas • Premium Apartments • Commercial Spaces</p>
+<!-- ═══════════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════════ -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
 
-        <form method="GET" action="/properties/" class="search-box mt-4 position-relative">
+        <!-- Badge -->
+        <div class="hero-badge">
+            <i class="bi bi-stars me-2"></i>Kerala's #1 Real Estate Platform
+        </div>
 
-            <div class="row justify-content-center">
+        <h1 class="hero-title">
+            Find Your<br>
+            <span class="hero-title-accent">Dream Property</span>
+        </h1>
+        <p class="hero-subtitle">
+            Luxury Villas &bull; Premium Apartments &bull; Commercial Spaces &bull; Exclusive Plots
+        </p>
 
-                <div class="col-md-6 position-relative">
-
-                    <input type="text" name="q" class="form-control"
-                        placeholder="Search villa, apartment, plot in Kochi..." value="{{ request.GET.q }}">
-
-                    <!-- Suggestions -->
-                    <div id="searchSuggestions" class="suggestions-box"></div>
-
-                </div>
-
-                <div class="col-md-2">
-                    <button class="btn btn-gold w-100">
-                        Search
+        <!-- SEARCH BOX — single bar -->
+        <div class="hero-search-card">
+            <form method="GET" action="/properties/" id="heroSearchForm">
+                <div class="d-flex gap-3 align-items-center flex-wrap">
+                    <div class="position-relative flex-grow-1">
+                        <span style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:16px;pointer-events:none;">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" name="q" id="heroSearchInput"
+                            class="search-field"
+                            placeholder="Search by location, property type, keyword…"
+                            value="{{ request.GET.q }}" autocomplete="off"
+                            style="padding-left:46px !important;">
+                        <div id="searchSuggestions" class="suggestions-box" style="display:none;"></div>
+                    </div>
+                    <button type="submit" class="btn-hero-search" style="flex-shrink:0;">
+                        <i class="bi bi-search me-2"></i>Search
                     </button>
                 </div>
+                <!-- Quick filters -->
+                <div class="quick-filters mt-3">
+                    <span class="qf-label">Quick:</span>
+                    <a href="/properties/?listing_type=Sale"  class="qf-tag">For Sale</a>
+                    <a href="/properties/?listing_type=Rent"  class="qf-tag">For Rent</a>
+                    <a href="/properties/?q=villa"             class="qf-tag">Villas</a>
+                    <a href="/properties/?q=apartment"         class="qf-tag">Apartments</a>
+                    <a href="/properties/?q=kochi"             class="qf-tag">Kochi</a>
+                </div>
+            </form>
+        </div>
 
-            </div>
+        <!-- Stats row -->
+        <div class="hero-stats">
+            <div class="hero-stat"><span class="hs-num">500+</span><span class="hs-lbl">Properties</span></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><span class="hs-num">50+</span><span class="hs-lbl">Expert Agents</span></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><span class="hs-num">1200+</span><span class="hs-lbl">Happy Clients</span></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><span class="hs-num">10+</span><span class="hs-lbl">Years Experience</span></div>
+        </div>
 
-        </form>
     </div>
 </section>
 
 
-<!-- PROPERTY CATEGORIES -->
-<section class="py-5 bg-light">
+<!-- ═══════════════════════════════════════════
+     CATEGORIES
+════════════════════════════════════════════ -->
+<section class="section-light py-6">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Browse by Category</h2>
-            <p class="text-muted">Find properties by type</p>
+
+        <div class="section-head text-center mb-5">
+            <span class="section-tag">Browse</span>
+            <h2 class="section-title-dark">Property Categories</h2>
+            <p class="section-sub">Find the perfect type of property for your needs</p>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             {% for cat in categories %}
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="/properties/?category={{ cat.slug }}" class="text-decoration-none">
-                    <div class="category-card shadow-sm">
-
+                    <div class="cat-card">
                         {% if cat.image %}
-                        <div class="category-img">
+                        <div class="cat-img">
                             <img src="{{ cat.image.url }}" alt="{{ cat.name }}">
+                            <div class="cat-img-overlay"></div>
+                        </div>
+                        {% else %}
+                        <div class="cat-img cat-img-placeholder">
+                            <i class="bi bi-building"></i>
                         </div>
                         {% endif %}
-
-                        <div class="category-info text-center p-3">
-                            <h5 class="fw-bold">{{ cat.name }}</h5>
-                            <small class="property-count">
+                        <div class="cat-body">
+                            <h5 class="cat-name">{{ cat.name }}</h5>
+                            <span class="cat-count">
+                                <i class="bi bi-grid-3x3-gap me-1"></i>
                                 {{ cat.properties.count }} Properties
-                            </small>
+                            </span>
+                            <div class="cat-arrow"><i class="bi bi-arrow-right"></i></div>
                         </div>
-
                     </div>
                 </a>
             </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted py-4">No categories yet.</div>
             {% endfor %}
         </div>
+
     </div>
 </section>
 
 
-
-<!-- FEATURED PROPERTIES -->
-<section class="featured-section py-5 ">
+<!-- ═══════════════════════════════════════════
+     FEATURED PROPERTIES
+════════════════════════════════════════════ -->
+<section class="section-light py-6">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title fw-bold">Featured Properties</h2>
-            <p class="text-muted">Handpicked premium listings just for you</p>
+
+        <div class="section-head text-center mb-5">
+            <span class="section-tag">Featured</span>
+            <h2 class="section-title-dark">Premium Listings</h2>
+            <p class="section-sub">Handpicked properties with exceptional value</p>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             {% for property in featured_properties %}
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="property-card shadow-sm">
-
-                    <div class="property-img position-relative">
+            <div class="col-lg-4 col-md-6">
+                <div class="prop-card">
+                    <!-- Image -->
+                    <div class="prop-img">
                         {% if property.featured_image %}
-                        <img src="{{ property.featured_image.url }}" class="img-fluid" alt="{{ property.title }}">
+                        <img src="{{ property.featured_image.url }}" alt="{{ property.title }}">
                         {% endif %}
-
-                        <!-- Category Badge -->
-                        <span class="badge bg-dark position-absolute top-0 start-0 m-2">
-                            {{ property.category.name }}
-                        </span>
+                        <div class="prop-badges">
+                            <span class="pb-cat">{{ property.category.name }}</span>
+                            <span class="pb-type">{{ property.listing_type }}</span>
+                        </div>
+                        {% if property.is_featured %}
+                        <div class="pb-star"><i class="bi bi-star-fill"></i></div>
+                        {% endif %}
                     </div>
-
-                    <div class="property-info p-3">
-                        <h5 class="fw-bold">{{ property.title }}</h5>
-                        <p class="text-muted mb-1">
-                            <i class="bi bi-geo-alt"></i> {{ property.location }}
-                        </p>
-
-                        
-
-                        <h6 class="price text-dark fw-bold">₹ {{ property.price }}</h6>
-
-                        <a href="{% url 'property_detail' property.slug %}" class="btn btn-dark btn-sm w-100 mt-2">
-                            View Details
+                    <!-- Info -->
+                    <div class="prop-body">
+                        <h5 class="prop-title">{{ property.title }}</h5>
+                        <p class="prop-loc"><i class="bi bi-geo-alt-fill me-1"></i>{{ property.location }}</p>
+                        <div class="prop-price">₹ {{ property.price }}</div>
+                        <a href="{% url 'property_detail' property.slug %}" class="btn-prop-view">
+                            View Details <i class="bi bi-arrow-right ms-1"></i>
                         </a>
                     </div>
-
                 </div>
             </div>
             {% empty %}
-            <div class="text-center">
-                <p>No featured properties available.</p>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured properties yet.</p>
             </div>
             {% endfor %}
         </div>
+
+        {% if featured_properties %}
+        <div class="text-center mt-5">
+            <a href="/properties/" class="btn-view-all">
+                <i class="bi bi-grid-3x3-gap me-2"></i>View All Properties
+            </a>
+        </div>
+        {% endif %}
+
     </div>
 </section>
 
-<!-- WHY CHOOSE US SECTION -->
-<section class="why-section py-5">
+
+<!-- ═══════════════════════════════════════════
+     WHY CHOOSE US
+════════════════════════════════════════════ -->
+<section class="section-light py-6">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Why Choose FLON</h2>
-            <p class="section-subtitle">
-                We deliver premium real estate solutions with trust and transparency.
-            </p>
+
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <span class="section-tag">Why Us</span>
+                <h2 class="section-title-dark mt-2">Why Choose <span style="color:#f8c146;">FLON</span></h2>
+                <p class="text-muted lh-lg mt-3">
+                    We combine local expertise with cutting-edge technology to help you
+                    find, buy, and invest in properties with complete confidence.
+                </p>
+                <a href="/about/" class="btn-outline-dark-cta mt-3">
+                    Learn More <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="col-lg-7">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="why-box">
+                            <div class="why-icon-wrap"><i class="bi bi-house-door-fill"></i></div>
+                            <h6>Premium Listings</h6>
+                            <p>Carefully verified villas, apartments and commercial spaces in prime locations.</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="why-box">
+                            <div class="why-icon-wrap"><i class="bi bi-shield-check-fill"></i></div>
+                            <h6>Verified Properties</h6>
+                            <p>Every listing is checked and verified by our expert team before publishing.</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="why-box">
+                            <div class="why-icon-wrap"><i class="bi bi-currency-rupee"></i></div>
+                            <h6>Transparent Pricing</h6>
+                            <p>No hidden costs. Clear documentation and guidance throughout the process.</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="why-box">
+                            <div class="why-icon-wrap"><i class="bi bi-people-fill"></i></div>
+                            <h6>Expert Advisors</h6>
+                            <p>Professional consultants helping you make confident investment decisions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="row text-center">
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="why-card">
-                    <div class="why-icon">
-                        <i class="bi bi-house-door-fill"></i>
-                    </div>
-                    <h5>Premium Listings</h5>
-                    <p>
-                        Carefully selected villas, apartments, and commercial properties
-                        in prime Kochi locations.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="why-card">
-                    <div class="why-icon">
-                        <i class="bi bi-currency-rupee"></i>
-                    </div>
-                    <h5>Transparent Pricing</h5>
-                    <p>
-                        No hidden costs. Clear documentation and expert guidance
-                        throughout the buying process.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="why-card">
-                    <div class="why-icon">
-                        <i class="bi bi-people-fill"></i>
-                    </div>
-                    <h5>Trusted Advisors</h5>
-                    <p>
-                        Professional real estate consultants helping you
-                        make confident investment decisions.
-                    </p>
-                </div>
-            </div>
-
-        </div>
     </div>
 </section>
 
-<!-- TESTIMONIAL SECTION -->
-<section class="testimonial-section py-5">
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════════ -->
+<section class="section-dark py-6">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">What Our Clients Say</h2>
-            <p class="section-subtitle">Trusted by hundreds of happy homeowners</p>
+
+        <div class="section-head text-center mb-5">
+            <span class="section-tag section-tag-dark">Reviews</span>
+            <h2 class="section-title-light">What Our Clients Say</h2>
+            <p class="section-sub-light">Trusted by hundreds of happy homeowners across Kerala</p>
         </div>
 
-        <div class="row">
-
-            <div class="col-md-4 mb-4">
-                <div class="testimonial-card">
-                    <p>
-                        “EstatePro helped us find our dream villa in Kakkanad.
-                        The process was smooth and completely transparent.”
-                    </p>
-                    <h6>— Rahul Menon</h6>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testi-card">
+                    <div class="testi-stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="testi-text">"EstatePro helped us find our dream villa in Kakkanad. The process was smooth and completely transparent. Highly recommend!"</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">RM</div>
+                        <div>
+                            <strong>Rahul Menon</strong>
+                            <div class="testi-role">Homeowner, Kochi</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="testimonial-card">
-                    <p>
-                        “Professional team and excellent support.
-                        Highly recommended for property investment in Kochi.”
-                    </p>
-                    <h6>— Anjali Nair</h6>
+            <div class="col-md-4">
+                <div class="testi-card testi-card-featured">
+                    <div class="testi-stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="testi-text">"Professional team and excellent support. Found our commercial space within a week. Highly recommended for property investment."</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">AN</div>
+                        <div>
+                            <strong>Anjali Nair</strong>
+                            <div class="testi-role">Business Owner, Thrissur</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="testimonial-card">
-                    <p>
-                        “They handled documentation and negotiation perfectly.
-                        Truly a trusted real estate partner.”
-                    </p>
-                    <h6>— Faisal Ahmed</h6>
+            <div class="col-md-4">
+                <div class="testi-card">
+                    <div class="testi-stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="testi-text">"They handled documentation and negotiation perfectly. Truly a trusted real estate partner I would use again without hesitation."</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">FA</div>
+                        <div>
+                            <strong>Faisal Ahmed</strong>
+                            <div class="testi-role">Investor, Calicut</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CTA BANNER
+════════════════════════════════════════════ -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="cta-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h3 class="cta-title">Ready to Find Your Perfect Property?</h3>
+                    <p class="cta-sub">Browse hundreds of verified listings or talk to one of our expert agents today.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end d-flex gap-3 justify-content-lg-end flex-wrap">
+                    <a href="/properties/" class="btn-cta-primary">Browse Properties</a>
+                    <a href="/contact/" class="btn-cta-outline">Talk to an Agent</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- ── SEARCH SUGGESTIONS JS ─────────────────────────────── -->
+<script>
+(function(){
+    const input = document.getElementById('heroSearchInput');
+    const box   = document.getElementById('searchSuggestions');
+    if(!input || !box) return;
+    let timer;
+
+    input.addEventListener('input', function(){
+        clearTimeout(timer);
+        const q = this.value.trim();
+        if(q.length < 2){ box.style.display='none'; box.innerHTML=''; return; }
+        timer = setTimeout(function(){
+            fetch('/properties/search-suggestions/?q=' + encodeURIComponent(q))
+            .then(r=>r.json())
+            .then(function(data){
+                if(!data.length){ box.style.display='none'; return; }
+                const icons = { 'Property':'building', 'Location':'geo-alt-fill', 'Category':'tag-fill' };
+                box.innerHTML = data.map(function(item){
+                    const t = item.title || item;
+                    const tp = item.type || 'Property';
+                    return '<div class="suggestion-item" data-val="'+t+'">'
+                        + '<span class="si-icon"><i class="bi bi-'+(icons[tp]||'building')+'"></i></span>'
+                        + '<span>'+t+'</span>'
+                        + '<span class="si-type">'+tp+'</span>'
+                        + '</div>';
+                }).join('');
+                box.style.display = 'block';
+            }).catch(function(){ box.style.display='none'; });
+        }, 260);
+    });
+
+    document.addEventListener('click', function(e){
+        const item = e.target.closest('.suggestion-item');
+        if(item){
+            input.value = item.dataset.val;
+            box.style.display='none';
+            document.getElementById('heroSearchForm').submit();
+            return;
+        }
+        if(!box.contains(e.target) && e.target !== input) box.style.display='none';
+    });
+
+    input.addEventListener('keydown', function(e){
+        if(e.key==='Escape') box.style.display='none';
+    });
+})();
+</script>
 
 {% endblock %}

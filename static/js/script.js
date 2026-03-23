@@ -1,152 +1,95 @@
+/* ================================================================
+   ESTATEPRO — Main JS
+   ================================================================ */
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    /* ================= CATEGORY SPECIFICATIONS ================= */
-
+    /* ── CATEGORY SPEC FIELDS (Add / Edit property) ─────────── */
     const categorySelect = document.getElementById("category-select");
-    const specContainer = document.getElementById("dynamic-spec-fields");
+    const specContainer  = document.getElementById("dynamic-spec-fields");
 
     if (categorySelect && specContainer) {
-
         function loadSpecs(categoryId) {
-
-            if (!categoryId) {
-                specContainer.innerHTML = "";
-                return;
-            }
-
-            fetch(`/properties/get-specs/?category_id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
-
-                specContainer.innerHTML = "";
-
-                if (!data.fields) return;
-
-                data.fields.forEach(field => {
-
-                    let html = "";
-
-                    if (field.type === "text") {
-                        html = `
-                        <div class="mb-3">
-                            <label class="form-label">${field.name}</label>
-                            <input type="text"
-                                   name="spec_${field.id}"
-                                   class="form-control">
-                        </div>`;
+            if (!categoryId) { specContainer.innerHTML = ""; return; }
+            specContainer.innerHTML = '<div class="text-white py-2"><span class="spinner-border spinner-border-sm me-2"></span>Loading specifications…</div>';
+            fetch(`/properties/get-category-specifications/?category_id=${categoryId}`)
+                .then(r => r.json())
+                .then(data => {
+                    specContainer.innerHTML = "";
+                    if (!data.fields || !data.fields.length) {
+                        specContainer.innerHTML = '<p class="text-muted small mt-2">No specification fields for this category.</p>';
+                        return;
                     }
-
-                    if (field.type === "number") {
-                        html = `
-                        <div class="mb-3">
-                            <label class="form-label">${field.name}</label>
-                            <input type="number"
-                                   name="spec_${field.id}"
-                                   class="form-control">
-                        </div>`;
-                    }
-
-                    if (field.type === "boolean") {
-                        html = `
-                        <div class="form-check mb-3">
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   name="spec_${field.id}">
-                            <label class="form-check-label">
-                                ${field.name}
-                            </label>
-                        </div>`;
-                    }
-
-                    specContainer.insertAdjacentHTML("beforeend", html);
-
-                });
-
-            })
-            .catch(error => console.error("Spec loading error:", error));
+                    data.fields.forEach(field => {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'mb-3';
+                        if (field.type === "text") {
+                            wrapper.innerHTML = `<label class="form-label text-white fw-semibold">${field.name}</label><input type="text" name="spec_${field.id}" class="form-control" placeholder="${field.name}">`;
+                        } else if (field.type === "number") {
+                            wrapper.innerHTML = `<label class="form-label text-white fw-semibold">${field.name}</label><input type="number" name="spec_${field.id}" class="form-control" placeholder="${field.name}">`;
+                        } else if (field.type === "boolean") {
+                            wrapper.innerHTML = `<div class="form-check mt-2"><input class="form-check-input" type="checkbox" name="spec_${field.id}" id="spec_check_${field.id}"><label class="form-check-label text-white" for="spec_check_${field.id}">${field.name}</label></div>`;
+                        }
+                        specContainer.appendChild(wrapper);
+                    });
+                })
+                .catch(() => { specContainer.innerHTML = '<p class="text-danger small">Failed to load specifications.</p>'; });
         }
-
-        categorySelect.addEventListener("change", function () {
-            loadSpecs(this.value);
-        });
-
-        /* Load specs automatically if category already selected (Edit page) */
-        if (categorySelect.value) {
-            loadSpecs(categorySelect.value);
-        }
+        categorySelect.addEventListener("change", function () { loadSpecs(this.value); });
+        if (categorySelect.value) loadSpecs(categorySelect.value);
     }
 
 
+    /* ── GLOBAL SPINNER ─────────────────────────────────────── */
+    window.showSpinner = function(msg) {
+        const sp = document.getElementById('globalSpinner');
+        if (!sp) return;
+        document.getElementById('spinnerMsg').textContent = msg || 'Processing…';
+        sp.style.display = 'flex';
+    };
 
-    /* ================= PROPERTY SEARCH ================= */
 
-    const searchInput = document.getElementById("propertySearch");
-    const suggestionBox = document.getElementById("searchSuggestions");
-
-    if (searchInput && suggestionBox) {
-
-        searchInput.addEventListener("keyup", function(){
-
-            let query = this.value;
-
-            if(query.length < 2){
-                suggestionBox.innerHTML = "";
-                return;
-            }
-
-            fetch(`/properties/search-suggestions/?q=${query}`)
-            .then(response => response.json())
-            .then(data => {
-
-                let html = "";
-
-                data.forEach(item => {
-                    html += `<div class="suggestion-item">${item}</div>`;
-                });
-
-                suggestionBox.innerHTML = html;
-
-            })
-            .catch(error => console.error("Search error:", error));
-
+    /* ── SEARCH SUGGESTIONS (legacy propertySearch id) ──────── */
+    const legacyInput = document.getElementById("propertySearch");
+    const legacyBox   = document.getElementById("searchSuggestions");
+    if (legacyInput && legacyBox) {
+        let debounce;
+        legacyInput.addEventListener("keyup", function() {
+            clearTimeout(debounce);
+            const q = this.value.trim();
+            if (q.length < 2) { legacyBox.innerHTML = ""; legacyBox.style.display = "none"; return; }
+            debounce = setTimeout(() => {
+                fetch(`/properties/search-suggestions/?q=${encodeURIComponent(q)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (!data.length) { legacyBox.style.display = "none"; return; }
+                        legacyBox.innerHTML = data.map(item =>
+                            `<div class="suggestion-item" data-val="${item.title||item}">${item.title||item}</div>`
+                        ).join('');
+                        legacyBox.style.display = "block";
+                    })
+                    .catch(() => {});
+            }, 280);
         });
-
     }
 
-
-
-    /* ================= CLICK SUGGESTION ================= */
-
-    document.addEventListener("click", function(e){
-
-        if(e.target.classList.contains("suggestion-item")){
-
-            const searchInput = document.getElementById("propertySearch");
-            const suggestionBox = document.getElementById("searchSuggestions");
-
-            if(searchInput){
-                searchInput.value = e.target.innerText;
-            }
-
-            if(suggestionBox){
-                suggestionBox.innerHTML = "";
-            }
-
+    /* ── SUGGESTION CLICK ───────────────────────────────────── */
+    document.addEventListener("click", function(e) {
+        if (e.target.classList.contains("suggestion-item") || e.target.closest(".suggestion-item")) {
+            const item = e.target.closest(".suggestion-item") || e.target;
+            const inp = document.getElementById("propertySearch") || document.getElementById("heroSearchInput") || document.getElementById("filterSearchInput");
+            if (inp) inp.value = item.dataset.val || item.innerText.trim();
+            document.querySelectorAll('.suggestions-box').forEach(b => { b.style.display='none'; b.innerHTML=''; });
         }
-
     });
 
 });
 
-
-/* ================= IMAGE CHANGE ================= */
-
+/* ── GALLERY IMAGE SWITCHER ─────────────────────────────────── */
 function changeMainImage(imageUrl) {
-
     const img = document.getElementById("mainPropertyImage");
-
-    if(img){
-        img.src = imageUrl;
+    if (img) {
+        img.style.opacity = '0.6';
+        setTimeout(() => { img.src = imageUrl; img.style.opacity = '1'; }, 200);
     }
-
 }
